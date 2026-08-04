@@ -4,7 +4,7 @@ A daily-style guessing game for **Persona 5 Royal**. You get one persona to find
 
 Inspired by [Loldle](https://loldle.net/) and [HKDLE](https://kaosi21.github.io/HKDLE/Index.html), built with the real Royal compendium data.
 
-> **[▶ Play it here](#)** — replace this link with your GitHub Pages URL
+> **[▶ Play it here](https://officialpooti.github.io/personadle/)** — replace this link with your GitHub Pages URL
 
 ## How to play
 

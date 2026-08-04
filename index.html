@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Personadle — guess the persona (Royal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blood:#E60012;--ink:#0B0B0B;--soot:#171414;--bone:#F4F1EC;
+    --gold:#F2C14E;--dead:#2A2624;--skew:-6deg;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ink);color:var(--bone);font-family:'Archivo',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+  .shards{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .shard{position:absolute;background:var(--blood);opacity:.12}
+  .s1{width:170vw;height:170px;top:-50px;left:-30vw;transform:rotate(-10deg)}
+  .s2{width:170vw;height:80px;bottom:5%;left:-30vw;transform:rotate(6deg);opacity:.08}
+  .s3{width:300px;height:130vh;top:-10vh;right:-150px;transform:rotate(13deg);opacity:.06}
+  .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:26px 16px 70px}
+
+  .kicker{font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.32em;background:var(--bone);color:var(--ink);display:inline-block;padding:3px 10px 2px}
+  h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:clamp(36px,8.5vw,62px);line-height:.92;margin:8px 0 0;text-transform:uppercase;text-shadow:5px 5px 0 var(--blood)}
+  .brand{display:inline-block;transform:skewY(-4deg);transform-origin:left center;margin:0 0 58px;max-width:100%}
+  .sub{font-size:13px;color:#A9A29C;margin:10px 0 0;font-style:italic}
+
+  .searchbar{position:relative;z-index:6;max-width:470px;margin-bottom:14px;clear:both}
+  input[type=text]{width:100%;font-family:'Archivo',sans-serif;font-size:15px;padding:13px 14px;background:var(--soot);border:2px solid #3A3634;color:var(--bone);transform:skewX(var(--skew))}
+  input[type=text]:focus{outline:none;border-color:var(--blood)}
+  input[type=text]::placeholder{color:#6C6561;font-style:italic}
+  input[type=text]:disabled{opacity:.5}
+  .drop{position:absolute;top:100%;left:0;right:0;z-index:5;background:#100E0E;border:2px solid #3A3634;border-top:none;max-height:270px;overflow-y:auto;display:none}
+  .drop.open{display:block}
+  .opt{padding:9px 13px;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+  .opt small{color:#7E7772;white-space:nowrap}
+  .opt.active{background:var(--blood);color:#fff}
+  .opt.active small{color:#FFD9DB}
+
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  button{font-family:'Archivo',sans-serif;font-weight:600;font-size:12.5px;background:var(--soot);color:var(--bone);border:2px solid #3A3634;padding:9px 13px;cursor:pointer;transform:skewX(var(--skew))}
+  button:hover:not(:disabled){background:var(--blood);border-color:var(--blood)}
+  button:disabled{opacity:.35;cursor:not-allowed}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .toggle{font-size:12px;color:#8E8781;letter-spacing:.04em;display:flex;align-items:center;gap:6px}
+  .count{font-size:12.5px;color:#A9A29C;margin:12px 0 8px;min-height:18px}
+
+  .scroller{overflow-x:auto;padding-bottom:8px}
+  .grid{min-width:840px}
+  .head,.line{display:grid;grid-template-columns:158px 100px 74px 96px 120px 132px 108px;gap:6px;margin-bottom:6px}
+  .head div{font-family:'Anton',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8E8781;text-align:center;padding:4px 2px}
+  .cell{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;font-size:12.5px;font-weight:600;padding:6px 4px;transform:skewX(var(--skew));border:2px solid #2F2B29;background:var(--dead);color:#CDC6C0;line-height:1.25}
+  .cell > *{transform:skewX(6deg)}
+  .cell.name{background:#151212;border-color:#4A4441;font-family:'Anton',sans-serif;font-size:13.5px;letter-spacing:.02em;text-transform:uppercase;font-weight:400}
+  .cell.ok{background:var(--blood);border-color:var(--blood);color:#fff}
+  .cell.close{background:var(--gold);border-color:var(--gold);color:#1A1206}
+  .cell .arrow{font-size:16px;line-height:1}
+  .cell.pending{opacity:0;transform:skewX(var(--skew)) rotateX(-90deg)}
+  .cell.flip{animation:flip .34s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes flip{
+    from{opacity:0;transform:skewX(-6deg) rotateX(-90deg) scale(.94)}
+    60%{opacity:1;transform:skewX(-6deg) rotateX(8deg) scale(1.03)}
+    to{opacity:1;transform:skewX(-6deg) rotateX(0) scale(1)}
+  }
+  .line{perspective:600px}
+  @media (prefers-reduced-motion:reduce){
+    .cell.pending{opacity:1;transform:skewX(var(--skew))}
+    .cell.flip{animation:none}
+  }
+
+  .banner{border:2px solid var(--blood);background:#120F0F;padding:16px 20px;transform:skewX(var(--skew));margin:16px 0;display:none}
+  .banner.show{display:block}
+  .banner > div{transform:skewX(6deg)}
+  .banner h2{font-family:'Anton',sans-serif;font-weight:400;font-size:28px;margin:4px 0;text-transform:uppercase}
+  .banner p{margin:3px 0;font-size:13px;color:#B7AFA8}
+  .verdict{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:12px;color:var(--blood)}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:#8E8781;margin-top:18px}
+  .chip{display:inline-block;width:12px;height:12px;transform:skewX(var(--skew));vertical-align:-1px;margin-right:5px}
+  footer{margin-top:20px;font-size:11.5px;color:#6F6863;line-height:1.7;max-width:660px}
+  footer a{color:#8E8781}
+</style>
+</head>
+<body>
+<div class="shards"><div class="shard s1"></div><div class="shard s2"></div><div class="shard s3"></div></div>
+<div class="wrap">
+  <div class="brand">
+    <div class="kicker">VELVET ROOM ARCHIVE · ROYAL</div>
+    <h1>Personadle</h1>
+    <p class="sub">Guess the persona. Every attempt narrows the compendium.</p>
+  </div>
+
+  <div class="searchbar">
+    <input type="text" id="q" placeholder="Type a persona name…" autocomplete="off" aria-label="Persona name">
+    <div class="drop" id="drop" role="listbox"></div>
+  </div>
+
+  <div class="bar">
+    <button id="h1" disabled>Reveal trait (4)</button>
+    <button id="h2" disabled>Reveal first letter (8)</button>
+    <button id="h3" disabled>Show answer (10)</button>
+    <button id="new">New persona</button>
+    <label class="toggle"><input type="checkbox" id="easy" checked style="accent-color:#E60012"> Skip DLC and treasure demons</label>
+  </div>
+  <div class="count" id="count">No guesses yet.</div>
+
+  <div class="banner" id="banner"><div>
+    <div class="verdict" id="verdict">REGISTERED</div>
+    <h2 id="bName">—</h2>
+    <p id="bMeta">—</p>
+    <p id="bRes">—</p>
+    <p id="bNote">—</p>
+  </div></div>
+
+  <div class="scroller"><div class="grid">
+    <div class="head">
+      <div>Persona</div><div>Arcana</div><div>Level</div><div>Affinity</div><div>Weak to</div><div>Mementos area</div><div>Type</div>
+    </div>
+    <div id="rows"></div>
+  </div></div>
+
+  <div class="legend">
+    <span><span class="chip" style="background:#E60012"></span>exact match</span>
+    <span><span class="chip" style="background:#F2C14E"></span>partial — shares a weakness, or level within 8</span>
+    <span><span class="chip" style="background:#2A2624;border:1px solid #444"></span>no match</span>
+    <span>▲ answer is higher · ▼ answer is lower</span>
+  </div>
+
+  <footer>
+    Levels, arcana, affinities, weaknesses, Mementos areas and traits are the real Royal values, pulled from the data
+    tables behind chinhodado's Persona 5 Royal fusion calculator. 232 personas. Fan-made and not affiliated with Atlus.
+  </footer>
+</div>
+
+<script>
+const DATA = [["Arsène","Fool",1,"Curse",["Ice","Bless"],["Curse"],"-","Standard","Pinch Anchor"],["Jack-o'-Lantern","Magician",2,"Fire",["Ice","Wind"],["Fire"],"Qimranut / Aiyatsbus","Standard","Thermal Conduct"],["Pixie","Lovers",2,"Electric",["Gun","Ice","Curse"],["Elec","Bless"],"Qimranut / Aiyatsbus","Standard","Static Electricity"],["Agathion","Chariot",3,"Electric",["Wind"],["Gun","Elec"],"Aiyatsbus","Standard","Rare Antibody"],["Mandrake","Death",3,"Electric",["Fire"],["Elec"],"Qimranut / Aiyatsbus","Standard","Savior Bloodline"],["Bicorn","Hermit",4,"Wind",["Elec"],["Curse"],"Aiyatsbus","Standard","Striking Weight"],["Cait Sith","Magician",5,"Ailment",["Wind"],["Elec"],"-","Standard","Thermal Conduct"],["Incubus","Devil",5,"Ailment",["Fire","Bless"],["Elec"],"Aiyatsbus","Standard","Draining Mouth"],["Kelpie","Strength",6,"Wind",["Elec"],["Ice"],"Aiyatsbus","Standard","Striking Weight"],["Saki Mitama","Lovers",6,"Healing",["Wind"],["Ice"],"-","Standard","Internal Hypnosis"],["Silky","Priestess",6,"Healing",["Fire","Elec"],["Ice"],"Aiyatsbus","Standard","Intense Focus"],["Genbu","Temperance",7,"Ice",["Elec"],["Ice","Psy"],"-","Standard","Cold-Blooded"],["Succubus","Moon",7,"Curse",["Wind","Bless"],["Fire","Curse"],"Aiyatsbus","Standard","Foul Odor"],["Obariyon","Fool",8,"Physical",["Elec"],["Phys"],"Aiyatsbus","Standard","Striking Weight"],["Angel","Justice",9,"Bless",["Gun","Curse"],["Elec","Bless"],"Aiyatsbus / Kaitul","Standard","Skillful Combo"],["Berith","Hierophant",9,"Physical",["Ice"],["Gun","Fire"],"Aiyatsbus","Standard","Crisis Control"],["Hua Po","Hanged",9,"Fire",["Gun","Ice"],["Fire"],"Chemdah","Standard","Thermal Conduct"],["Koropokkuru","Hermit",9,"Ice",["Fire"],["Ice","Wind"],"Chemdah","Standard","Foul Odor"],["Mokoi","Death",9,"Ailment",["Wind"],["Elec"],"Chemdah","Standard","Gloomy Child"],["Regent","Emperor",10,"-",["Nuke"],["Phys","Gun"],"Qimranut / Aiyatsbus / Chemdah","Treasure","Ultimate Vessel"],["Slime","Chariot",10,"Curse",["Fire","Wind"],["Phys","Gun"],"Qimranut / Aiyatsbus","Standard","Rare Antibody"],["Apsaras","Priestess",11,"Ice",["Fire","Elec"],["Ice"],"Chemdah","Standard","Internal Hypnosis"],["Jack Frost","Magician",11,"Ice",["Fire"],["Ice"],"Chemdah","Standard","Frigid Bloodline"],["Kodama","Star",11,"Ailment",["Fire"],["Ice"],"Aiyatsbus","Standard","Skillful Combo"],["Koppa Tengu","Temperance",11,"Wind",["Ice","Bless"],["Wind"],"Chemdah","Standard","Intense Focus"],["Orpheus F","Fool",11,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Kushi Mitama","Councillor",12,"Healing",["Fire"],["Wind"],"-","Standard","Gluttonmouth"],["Onmoraki","Moon",12,"Curse",["Ice","Bless"],["Fire","Curse"],"Chemdah","Standard","Intense Focus"],["Ame-no-Uzume","Lovers",13,"Almighty",["Psy"],["Fire"],"Chemdah","Standard","Electric Bloodline"],["Ippon-Datara","Hermit",13,"Physical",["Ice"],["Gun","Fire","Wind","Bless","Curse"],"Chemdah","Standard","Striking Weight"],["Orpheus F Picaro","Fool",13,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Archangel","Justice",14,"Bless",["Elec","Curse"],["Bless"],"Aiyatsbus","Standard","Skillful Combo"],["Inugami","Hanged",14,"Fire",["Wind"],["Gun","Fire","Curse"],"Chemdah","Standard","Foul Odor"],["Makami","Temperance",15,"Nuclear",["Elec"],["Gun","Wind","Nuke","Bless"],"Chemdah","Standard","Skillful Technique"],["Queen's Necklace","Empress",15,"-",["Psy"],["Phys","Gun"],"Kaitul","Treasure","Ultimate Vessel"],["Shiisaa","Strength",15,"Electric",["Psy","Curse"],["Phys","Bless"],"-","Standard","Atomic Bloodline"],["Eligor","Emperor",16,"Fire",["Elec"],["Fire","Curse"],"Chemdah","Standard","Thermal Conduct"],["High Pixie","Fool",16,"Healing",["Gun","Nuke"],["Elec","Wind"],"Kaitul","Standard","Skillful Combo"],["Suzaku","Sun",16,"Nuclear",["Ice"],["Fire","Nuke"],"-","Standard","Gluttonmouth"],["Kaguya","Moon",16,"Almighty",["Fire"],["Wind","Bless","Curse"],"-","DLC","Inviolable Beauty"],["Matador","Death",17,"Psy",["Elec"],["Wind"],"-","Standard","Potent Hypnosis"],["Nekomata","Magician",17,"Ailment",["Elec"],["Psy"],"Kaitul","Standard","Foul Odor"],["Orobas","Hierophant",17,"Fire",["Ice"],["Wind","Curse"],"Kaitul","Standard","Mighty Gaze"],["Sudama","Hermit",17,"Psy",["Ice","Nuke"],["Wind"],"Chemdah","Standard","Gloomy Child"],["Black Ooze","Moon",18,"Curse",["Elec","Psy","Bless"],["Phys","Gun","Ice","Curse"],"Adyeshach","Standard","Rare Antibody"],["Shiki-Ouji","Chariot",18,"Psy",["Nuke"],["Phys","Gun","Bless","Curse"],"Chemdah","Standard","Psychic Bloodline"],["Flauros","Devil",19,"Ailment",["Ice"],["Fire","Wind","Nuke"],"-","Special","Gluttonmouth"],["Leanan Sidhe","Lovers",19,"Almighty",["Fire"],["Wind","Psy"],"Kaitul","Standard","Skillful Technique"],["Nue","Death",20,"Curse",["Fire"],["Ice","Curse"],"Chemdah","Standard","Mighty Gaze"],["Oni","Strength",20,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Stone of Scone","Fortune",20,"-",["Fire"],["Phys","Gun"],"Akzeriyyuth","Treasure","Ultimate Vessel"],["Yaksini","Empress",20,"Ice",["Nuke"],["Gun","Ice"],"Kaitul","Standard","Foul Odor"],["Izanagi","Fool",20,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Orthrus","Hanged",21,"Fire",["Ice"],["Fire","Nuke"],"Kaitul","Standard","Thermal Conduct"],["Phoenix","Faith",21,"Nuclear",["Elec"],["Ice","Wind"],"-","Standard","Atomic Bloodline"],["Jikokuten","Temperance",22,"Physical",["Curse"],["Phys","Bless"],"-","Standard","Internal Hypnosis"],["Nigi Mitama","Councillor",22,"Healing",["Elec"],["Bless","Curse"],"-","Standard","Relief Bloodline"],["Fuu-Ki","Star",23,"Wind",["Elec"],["Gun","Wind"],"Kaitul","Standard","Intense Focus"],["Sandman","Magician",23,"Wind",["Fire","Elec"],["Wind"],"Akzeriyyuth","Standard","Foul Odor"],["Izanagi Picaro","Fool",23,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Naga","Hermit",24,"Electric",["Wind"],["Gun","Elec"],"Akzeriyyuth","Standard","Striking Weight"],["Rakshasa","Strength",24,"Physical",["Wind","Bless"],["Phys","Gun","Fire","Curse"],"Kaitul","Standard","Skillful Combo"],["Sui-Ki","Moon",24,"Ice",["Nuke"],["Gun","Ice","Elec"],"Kaitul","Standard","Frigid Bloodline"],["Anzu","Hierophant",25,"Wind",["Gun","Nuke"],["Elec","Wind"],"Akzeriyyuth","Standard","Wind Bloodline"],["Kin-Ki","Chariot",25,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Koh-i-Noor","Priestess",25,"-",["Gun"],["Phys"],"Adyeshach","Treasure","Ultimate Vessel"],["Setanta","Emperor",25,"Physical",["Psy"],["Gun","Nuke"],"-","Standard","Retaliating Body"],["Kaguya Picaro","Moon",25,"Almighty",["Fire"],["Bless","Curse"],"-","DLC","Inviolable Beauty"],["Isis","Priestess",26,"Healing",["Psy"],["Bless"],"Akzeriyyuth","Standard","Savior Bloodline"],["Lamia","Empress",26,"Fire",["Ice","Nuke"],["Elec","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Take-Minakata","Hanged",26,"Electric",["Psy"],["Elec","Curse"],"Kaitul","Standard","Electric Bloodline"],["Orpheus","Fool",26,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Andras","Devil",27,"Ice",["Fire","Bless"],["Ice","Psy","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Clotho","Fortune",27,"Healing",["Ice","Nuke"],["Wind"],"-","Standard","Relief Bloodline"],["Tam Lin","Faith",27,"Almighty",["Curse"],["Phys","Fire","Wind","Bless"],"-","Special","Gluttonmouth"],["Choronzon","Magician",28,"Curse",["Bless"],["Phys","Fire"],"Kaitul","Standard","Draining Mouth"],["Pisaca","Death",28,"Curse",["Fire","Bless"],["Elec","Curse"],"Akzeriyyuth","Standard","Rare Antibody"],["Principality","Justice",29,"Bless",["Curse"],["Fire","Bless"],"-","Standard","Blessed Bloodline"],["Orpheus Picaro","Fool",29,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Ara Mitama","Chariot",30,"Nuclear",["Ice"],["Phys"],"-","Standard","Atomic Bloodline"],["Neko Shogun","Star",30,"Almighty",["Wind"],["Phys","Elec","Bless","Curse"],"-","Special","Pinch Anchor"],["Orlov","Strength",30,"-",["Curse"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Ariadne","Fortune",30,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Kurama Tengu","Hermit",31,"Wind",[],["Ice","Wind","Bless","Curse"],"Sheriruth","Standard","Skillful Combo"],["Zouchouten","Strength",31,"Electric",["Wind"],["Phys"],"-","Standard","Electric Bloodline"],["Decarabia","Councillor",32,"Fire",["Phys"],["Fire","Nuke","Curse"],"Adyeshach","Standard","Heated Bloodline"],["Lilim","Devil",32,"Ice",["Wind","Bless"],["Ice","Curse"],"Adyeshach","Standard","Cold-Blooded"],["Mitra","Temperance",33,"Bless",["Elec"],["Ice","Bless"],"-","Standard","Blessed Bloodline"],["Mothman","Moon",33,"Electric",["Gun"],["Elec","Psy"],"Adyeshach","Standard","Static Electricity"],["Anubis","Judgement",34,"Almighty",[],["Gun","Psy","Bless","Curse"],"Akzeriyyuth","Standard","Deathly Illness"],["Thunderbird","Sun",34,"Electric",["Psy","Curse"],["Elec"],"-","Standard","Electric Bloodline"],["Arahabaki","Hermit",35,"Ailment",["Psy","Nuke"],["Phys","Gun","Bless","Curse"],"Adyeshach","Standard","Immunity"],["Emperor's Amulet","Hanged",35,"-",["Elec"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Lachesis","Fortune",35,"Ice",["Elec"],["Ice","Wind"],"-","Standard","Internal Hypnosis"],["Kaiwan","Star",36,"Almighty",["Nuke"],["Gun","Psy"],"Adyeshach","Standard","Psychic Bloodline"],["Thoth","Emperor",36,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Akzeriyyuth","Standard","Skillful Technique"],["Belphegor","Tower",37,"Ice",["Fire"],["Ice","Elec","Nuke","Curse"],"Adyeshach","Standard","Intense Focus"],["Hell Biker","Death",37,"Fire",["Bless"],["Fire","Wind"],"-","Special","Internal Hypnosis"],["Legion","Fool",38,"Psy",["Bless"],["Phys","Fire","Psy","Curse"],"Adyeshach","Standard","Draining Mouth"],["White Rider","Chariot",38,"Curse",["Ice"],["Fire","Bless","Curse"],"-","Standard","Bloodstained Eyes"],["Atropos","Fortune",39,"Electric",["Fire"],["Wind"],"-","Standard","Mighty Gaze"],["Mithras","Sun",39,"Nuclear",["Psy"],["Phys","Gun","Fire","Nuke"],"Adyeshach","Standard","Skillful Technique"],["Unicorn","Faith",39,"Bless",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Daisoujou","Hierophant",40,"Bless",["Curse"],["Phys","Bless"],"-","Standard","Draining Mouth"],["Hariti","Empress",40,"Electric",["Wind"],["Psy","Bless"],"-","Standard","Electric Bloodline"],["Hope Diamond","Death",40,"-",["Ice"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Kikuri-Hime","Priestess",40,"Healing",["Fire"],["Wind","Bless"],"Sheriruth","Standard","Relief Bloodline"],["Power","Justice",41,"Bless",["Gun","Curse"],["Wind","Bless"],"Sheriruth","Standard","Internal Hypnosis"],["Red Rider","Tower",41,"Psy",["Bless"],["Curse"],"-","Standard","Ailment Hunter"],["Hecatoncheires","Hanged",42,"Physical",["Bless"],["Gun","Curse"],"-","Standard","Gluttonmouth"],["Kumbhanda","Hermit",42,"Ailment",["Psy"],["Fire","Curse"],"Sheriruth","Standard","Rare Antibody"],["Kushinada","Lovers",42,"Healing",["Ice","Nuke"],["Bless"],"Sheriruth","Standard","Savior Bloodline"],["Ose","Fool",42,"Ailment",["Bless"],["Gun","Fire","Curse"],"Sheriruth","Standard","Retaliating Body"],["Ariadne Picaro","Fortune",42,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Girimehkala","Moon",43,"Ailment",["Bless"],["Phys","Gun","Fire","Curse"],"Adyeshach","Standard","Cursed Bloodline"],["Queen Mab","Magician",43,"Almighty",["Wind"],["Fire","Elec"],"Sheriruth","Standard","Static Electricity"],["Yurlungur","Sun",43,"Electric",["Psy"],["Elec","Bless"],"-","Standard","Mouth of Savoring"],["Ananta","Councillor",44,"Nuclear",["Elec"],["Ice"],"-","Standard","Atomic Bloodline"],["Valkyrie","Strength",44,"Physical",["Fire"],["Gun","Ice","Bless"],"Sheriruth","Standard","Skillful Combo"],["Magatsu-Izanagi","Tower",44,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Byakko","Temperance",45,"Ice",["Fire","Nuke"],["Ice","Curse"],"-","Standard","Retaliating Body"],["Pazuzu","Devil",45,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Cursed Bloodline"],["Fortuna","Fortune",46,"Wind",["Elec"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Athena","Chariot",46,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Horus","Sun",47,"Almighty",["Fire"],["Elec","Bless"],"-","Standard","Potent Hypnosis"],["Narcissus","Lovers",48,"Ailment",["Fire"],["Elec","Wind","Bless"],"Sheriruth","Standard","Gluttonmouth"],["Rangda","Magician",48,"Curse",["Elec","Bless"],["Phys","Gun","Fire","Curse"],"Sheriruth","Standard","Cursed Bloodline"],["Magatsu-Izanagi Picaro","Tower",48,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Bugs","Fool",49,"Almighty",["Nuke"],["Psy","Curse"],"-","Special","Potent Hypnosis"],["Koumokuten","Hermit",49,"Physical",["Ice"],["Phys","Bless"],"-","Standard","Gluttonmouth"],["Crystal Skull","Fool",50,"-",["Wind"],["Phys","Gun"],"Sheriruth / Da'at","Treasure","Ultimate Vessel"],["Dakini","Empress",50,"Physical",[],["Gun","Fire"],"Sheriruth","Standard","Skillful Combo"],["Sarasvati","Priestess",50,"Healing",["Nuke"],["Ice","Elec"],"Sheriruth","Standard","Relief Bloodline"],["Athena Picaro","Chariot",50,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Tsukiyomi","Moon",50,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Jatayu","Hanged",51,"Wind",["Nuke"],["Ice","Wind","Bless"],"-","Standard","Wind Bloodline"],["Seth","Tower",51,"Fire",["Bless"],["Fire","Wind","Curse"],"-","Special","Potent Hypnosis"],["Barong","Emperor",52,"Electric",["Wind","Curse"],["Gun","Elec","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Garuda","Star",52,"Wind",[],["Wind","Bless"],"Sheriruth","Standard","Wind Bloodline"],["Mishaguji","Hierophant",52,"Ailment",["Ice"],["Phys","Elec","Curse"],"-","Standard","Ailment Hunter"],["Norn","Fortune",52,"Almighty",[],["Elec","Wind","Bless"],"Sheriruth","Standard","Intense Focus"],["Ganesha","Sun",53,"Ailment",["Psy"],["Phys","Gun","Wind"],"Sheriruth","Standard","Gluttonmouth"],["Skadi","Priestess",53,"Ice",[],["Ice","Curse"],"Sheriruth","Standard","Bloodstained Eyes"],["Okuninushi","Faith",54,"Psy",["Wind","Nuke"],["Elec","Psy"],"-","Standard","Psychic Bloodline"],["Pale Rider","Death",54,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Foul Stench"],["Cerberus","Chariot",55,"Fire",["Ice"],["Fire","Nuke"],"Sheriruth","Standard","Heated Bloodline"],["Raja Naga","Temperance",55,"Electric",[],["Elec"],"-","Standard","Electric Bloodline"],["Tsukiyomi Picaro","Moon",55,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Parvati","Lovers",56,"Psy",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Skillful Technique"],["Titania","Empress",56,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Sheriruth","Standard","Foul Stench"],["Asterius","Fortune",56,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Yatagarasu","Councillor",57,"Fire",["Curse"],["Wind","Bless"],"-","Standard","Potent Hypnosis"],["Baphomet","Devil",58,"Almighty",["Bless"],["Fire","Curse"],"Sheriruth","Standard","Thermal Conduct"],["Melchizedek","Justice",58,"Bless",["Wind"],["Psy","Bless","Curse"],"Da'at","Standard","Deathly Illness"],["Black Rider","Tower",59,"Curse",["Fire"],["Ice","Bless","Curse"],"-","Standard","Gloomy Child"],["Trumpeter","Judgement",59,"Almighty",[],["Ice","Elec","Bless","Curse"],"-","Special","Relentless"],["Lilith","Moon",60,"Almighty",["Fire"],["Ice","Nuke","Curse"],"Da'at","Standard","Mighty Gaze"],["Moloch","Hanged",60,"Fire",["Ice"],["Fire","Elec","Wind","Psy","Curse"],"Da'at","Standard","Immunity"],["Orichalcum","Faith",60,"-",["Bless"],["Phys","Gun"],"-","Treasure","Ultimate Vessel"],["King Frost","Emperor",61,"Ice",[],["Ice","Bless"],"Sheriruth","Standard","Frigid Bloodline"],["Chernobog","Death",62,"Ailment",["Fire","Bless"],["Gun","Ice","Elec","Curse"],"Da'at","Standard","Crisis Control"],["Seiryu","Councillor",62,"Ice",["Nuke"],["Ice"],"-","Standard","Relentless"],["Asterius Picaro","Fortune",62,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Forneus","Magician",63,"Psy",["Elec"],["Ice","Psy"],"Sheriruth","Standard","Bloodstained Eyes"],["Kali","Empress",63,"Fire",[],["Gun","Fire","Psy","Curse"],"-","Standard","Relentless"],["Hanuman","Strength",64,"Physical",["Ice"],["Gun","Psy","Bless"],"Sheriruth","Standard","Potent Hypnosis"],["Thor","Chariot",64,"Electric",[],["Phys","Elec","Bless","Curse"],"Da'at","Standard","Intense Focus"],["Yamata-no-Orochi","Judgement",64,"Ice",[],["Phys","Ice","Wind","Curse"],"Da'at","Standard","Cold-Blooded"],["Atavaka","Faith",65,"Physical",[],["Phys","Gun","Fire","Curse"],"-","Standard","Savior Bloodline"],["Thanatos","Death",65,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Oberon","Emperor",66,"Electric",["Nuke"],["Elec","Psy"],"Sheriruth","Standard","Static Electricity"],["Quetzalcoatl","Sun",66,"Wind",["Psy"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Bishamonten","Hierophant",67,"Nuclear",["Ice"],["Fire","Bless","Curse"],"-","Standard","Savior Bloodline"],["Black Frost","Fool",67,"Almighty",[],["Fire","Ice","Nuke","Curse"],"-","Special","Frigid Bloodline"],["Dominion","Justice",68,"Bless",["Elec"],["Nuke","Bless","Curse"],"Da'at","Standard","Blessed Bloodline"],["Vasuki","Star",68,"Ailment",["Curse"],["Ice","Elec"],"-","Special","Foul Stench"],["Lakshmi","Fortune",69,"Healing",["Fire"],["Ice","Bless"],"-","Standard","Wealth of Lotus"],["Thanatos Picaro","Death",69,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Byakhee","Moon",70,"Fire",["Ice","Nuke"],["Fire","Wind","Curse"],"-","Standard","Heated Bloodline"],["Loa","Hermit",70,"Curse",["Psy","Bless"],["Fire","Elec","Nuke"],"-","Standard","Draining Mouth"],["Dionysus","Councillor",71,"Ailment",[],["Elec","Bless","Curse"],"-","Standard","Pinch Anchor"],["Mot","Death",72,"Ailment",["Wind"],["Gun","Elec","Curse"],"Da'at","Standard","Mighty Gaze"],["Throne","Justice",72,"Bless",["Nuke"],["Fire","Wind","Bless"],"Da'at","Standard","Crisis Control"],["Macabre","Hanged",73,"Curse",["Bless"],["Elec","Curse"],"-","Standard","Ailment Hunter"],["Mara","Tower",73,"Psy",[],["Gun","Fire","Psy","Bless","Curse"],"Da'at","Standard","Mighty Gaze"],["Chimera","Strength",74,"Physical",["Wind","Curse"],["Fire","Ice"],"-","Standard","Foul Stench"],["Nebiros","Devil",74,"Curse",["Bless"],["Psy","Curse"],"-","Standard","Psychic Bloodline"],["Abaddon","Judgement",75,"Curse",[],["Phys","Gun","Bless","Curse"],"Da'at","Standard","Mouth of Savoring"],["Sandalphon","Moon",75,"Bless",[],["Phys","Gun","Bless","Curse"],"-","Standard","Omen"],["Asura","Sun",76,"Nuclear",["Psy"],["Fire","Nuke"],"-","Special","Atomic Hellscape"],["Cu Chulainn","Faith",76,"Almighty",["Elec"],["Phys","Gun","Wind","Bless"],"-","Standard","Potent Hypnosis"],["Kohryu","Hierophant",76,"Psy",["Nuke"],["Elec","Psy","Bless"],"-","Special","Universal Law"],["Raoul","Fool",76,"Almighty",["Bless"],["Curse"],"-","DLC","Hazy Presence"],["Gabriel","Temperance",77,"Almighty",[],["Psy","Bless"],"-","Standard","Relentless"],["Scathach","Priestess",77,"Wind",[],["Ice","Elec","Curse"],"Adyeshach","Standard","Skillful Technique"],["Raphael","Lovers",78,"Almighty",[],["Ice","Psy","Bless"],"-","Standard","Pinch Anchor"],["Sraosha","Star",80,"Bless",["Curse"],["Elec","Bless"],"-","Special","Blessed Bloodline"],["Vohu Manah","Councillor",80,"Almighty",["Wind"],["Elec","Bless","Curse"],"-","Standard","Positive Thoughts"],["Zaou-Gongen","Strength",80,"Fire",["Elec"],["Fire","Bless","Curse"],"-","Standard","Undying Fury"],["Izanagi-no-Okami","World",80,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Alilat","Empress",81,"Ice",["Fire","Curse"],["Phys","Gun","Ice","Psy"],"-","Standard","Frigid Bloodline"],["Uriel","Justice",81,"Almighty",[],["Fire","Nuke","Bless"],"-","Standard","Mouth of Savoring"],["Messiah","Judgement",81,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Attis","Hanged",82,"Fire",["Curse"],["Fire","Wind"],"-","Standard","Vitality of the Tree"],["Baal","Emperor",82,"Wind",[],["Fire","Wind","Bless"],"-","Standard","Wind Bloodline"],["Belial","Devil",82,"Curse",[],["Phys","Ice","Curse"],"-","Standard","Bloodstained Eyes"],["Shiva","Judgement",82,"Psy",["Nuke"],["Ice","Elec","Psy","Bless","Curse"],"-","Special","Psychic Bloodline"],["Alice","Death",83,"Curse",["Bless"],["Psy","Nuke","Curse"],"-","Special","Just Die"],["Cybele","Priestess",83,"Healing",["Elec"],["Fire","Bless"],"-","Standard","Linked Bloodline"],["Surt","Magician",83,"Fire",["Ice"],["Gun","Fire","Elec","Nuke"],"-","Standard","Heated Bloodline"],["Vishnu","Fool",83,"Almighty",["Fire"],["Ice","Bless","Curse"],"-","Standard","Vahana's Wings"],["Ardha","Temperance",84,"Almighty",[],["Phys","Ice","Elec"],"-","Special","Naranari"],["Hastur","Star",84,"Wind",[],["Fire","Wind","Psy","Curse"],"-","Standard","Mouth of Savoring"],["Odin","Emperor",84,"Electric",[],["Elec","Wind","Bless","Curse"],"-","Standard","Bargain Bolts"],["Siegfried","Faith",84,"Physical",["Nuke"],["Phys","Gun","Ice","Elec"],"-","Standard","Retaliating Body"],["Ishtar","Lovers",85,"Healing",["Wind"],["Elec"],"-","Standard","Grace of Mother"],["Mother Harlot","Empress",85,"Ice",["Bless"],["Elec","Curse"],"-","Standard","Ghost Nest"],["Fafnir","Hermit",86,"Nuclear",[],["Phys","Gun","Fire","Elec","Nuke"],"-","Standard","Ailment Hunter"],["Futsunushi","Magician",86,"Physical",["Nuke"],["Phys"],"-","Standard","Will of the Sword"],["Beelzebub","Devil",87,"Curse",["Bless"],["Fire","Curse"],"-","Standard","Mother's Lament"],["Michael","Judgement",87,"Almighty",[],["Gun","Bless","Curse"],"-","Special","Potent Hypnosis"],["Yoshitsune","Tower",87,"Physical",[],["Phys","Fire","Elec","Bless"],"-","Special","Retaliating Body"],["Chi You","Chariot",88,"Psy",["Nuke"],["Phys","Gun","Psy"],"-","Special","Chi You's Blessing"],["Metatron","Justice",89,"Bless",["Elec","Curse"],["Wind","Psy","Nuke"],"-","Special","Martyr's Gift"],["Ongyo-Ki","Hermit",89,"Physical",[],["Phys","Bless","Curse"],"-","Special","Demon's Bite"],["Izanagi-no-Okami Picaro","World",89,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Mada","Tower",90,"Fire",["Ice"],["Fire","Psy","Nuke"],"-","Standard","Drunken Passion"],["Messiah Picaro","Judgement",90,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Satan","Judgement",92,"Ice",[],["Gun","Ice","Curse"],"-","Standard","Cocytus"],["Lucifer","Star",93,"Almighty",["Bless"],["Phys","Gun","Fire","Ice","Elec","Wind","Curse"],"-","Special","Allure of Wisdom"],["Maria","Faith",93,"Healing",["Fire"],["Elec","Wind","Bless"],"-","Standard","Ave Maria"],["Satanael","Fool",95,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke","Bless","Curse"],"-","Special","Pagan Allure"]];
+const LIST = DATA.map(r => ({name:r[0],arcana:r[1],level:r[2],aff:r[3],weak:r[4],res:r[5],area:r[6],type:r[7],trait:r[8]}));
+
+let answer, guesses, done, active = 0, matches = [];
+const $ = id => document.getElementById(id);
+const q = $("q"), drop = $("drop"), rows = $("rows");
+
+function pool(){
+  return $("easy").checked ? LIST.filter(p => p.type === "Standard" || p.type === "Special") : LIST;
+}
+
+function newGame(){
+  const p = pool();
+  answer = p[Math.floor(Math.random() * p.length)];
+  guesses = []; done = false;
+  rows.innerHTML = ""; q.value = ""; q.disabled = false;
+  $("banner").classList.remove("show");
+  closeDrop(); updateCount(); q.focus();
+}
+
+function updateCount(msg){
+  const n = guesses.length;
+  $("count").textContent = msg || (n === 0
+    ? `No guesses yet — ${pool().length} personas in play.`
+    : `${n} guess${n === 1 ? "" : "es"} so far.`);
+  $("h1").disabled = done || n < 4;
+  $("h2").disabled = done || n < 8;
+  $("h3").disabled = done || n < 10;
+}
+
+function cell(text, cls, arrow){
+  const d = document.createElement("div");
+  d.className = "cell" + (cls ? " " + cls : "");
+  const s = document.createElement("span");
+  s.textContent = text;
+  d.appendChild(s);
+  if (arrow){
+    const a = document.createElement("span");
+    a.className = "arrow"; a.textContent = arrow;
+    d.appendChild(a);
+  }
+  return d;
+}
+
+function setCompare(a, b){
+  const A = new Set(a), B = new Set(b);
+  if (a.length === b.length && a.every(x => B.has(x))) return "ok";
+  return a.some(x => B.has(x)) ? "close" : "";
+}
+
+const STEP = 190;
+let revealing = false;
+
+function guess(p){
+  if (done || revealing) return;
+  guesses.push(p.name);
+  const diff = answer.level - p.level;
+  const plan = [
+    [p.name, "name", ""],
+    [p.arcana, p.arcana === answer.arcana ? "ok" : "", ""],
+    [p.level, diff === 0 ? "ok" : (Math.abs(diff) <= 8 ? "close" : ""), diff === 0 ? "" : (diff > 0 ? "▲" : "▼")],
+    [p.aff, p.aff === answer.aff ? "ok" : "", ""],
+    [p.weak.length ? p.weak.join(", ") : "None", setCompare(p.weak, answer.weak), ""],
+    [p.area === "-" ? "Not in Mementos" : p.area, p.area === answer.area ? "ok" : "", ""],
+    [p.type, p.type === answer.type ? "ok" : "", ""]
+  ];
+
+  const line = document.createElement("div");
+  line.className = "line";
+  const cells = plan.map(([text, cls, arrow]) => {
+    const el = cell(text, "pending", arrow);
+    if (cls === "name") el.classList.add("name");
+    line.appendChild(el);
+    return {el, cls};
+  });
+  rows.prepend(line);
+  q.value = ""; closeDrop();
+
+  const slow = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const step = slow ? STEP : 0;
+  revealing = true;
+  cells.forEach((c, i) => setTimeout(() => {
+    c.el.classList.remove("pending");
+    if (c.cls && c.cls !== "name") c.el.classList.add(c.cls);
+    c.el.classList.add("flip");
+  }, i * step));
+
+  setTimeout(() => {
+    revealing = false;
+    updateCount();
+    if (p.name === answer.name) finish(true);
+  }, cells.length * step + (slow ? 260 : 0));
+}
+
+function finish(win){
+  done = true; q.disabled = true;
+  $("verdict").textContent = win ? "REGISTERED TO THE COMPENDIUM" : "THE CONTRACT LAPSED";
+  $("bName").textContent = answer.name;
+  $("bMeta").textContent = `${answer.arcana} · level ${answer.level} · ${answer.aff} affinity · ${answer.type}`;
+  $("bRes").textContent = `Resists ${answer.res.length ? answer.res.join(", ") : "nothing"} · weak to ${answer.weak.length ? answer.weak.join(", ") : "nothing"} · trait: ${answer.trait}`;
+  $("bNote").textContent = win ? `Found in ${guesses.length} guess${guesses.length === 1 ? "" : "es"}.` : "Revealed. The next one will come easier.";
+  $("banner").classList.add("show");
+  updateCount(win ? "Correct." : "Answer revealed.");
+}
+
+function suggestions(){
+  const term = q.value.trim().toLowerCase();
+  return LIST.filter(p => !guesses.includes(p.name) && p.name.toLowerCase().includes(term)).slice(0, 60);
+}
+
+function openDrop(){
+  if (done) return closeDrop();
+  matches = suggestions(); active = 0;
+  drop.innerHTML = "";
+  if (!matches.length) return closeDrop();
+  matches.forEach((p, i) => {
+    const o = document.createElement("div");
+    o.className = "opt" + (i === 0 ? " active" : "");
+    o.setAttribute("role", "option");
+    const n = document.createElement("span"); n.textContent = p.name;
+    const s = document.createElement("small"); s.textContent = `${p.arcana} · lv ${p.level}`;
+    o.append(n, s);
+    o.onmousedown = e => { e.preventDefault(); guess(p); };
+    drop.appendChild(o);
+  });
+  drop.classList.add("open");
+}
+function closeDrop(){ drop.classList.remove("open"); drop.innerHTML = ""; matches = []; }
+function highlight(){
+  [...drop.children].forEach((c, i) => c.classList.toggle("active", i === active));
+  const el = drop.children[active];
+  if (el) el.scrollIntoView({block: "nearest"});
+}
+
+q.addEventListener("input", openDrop);
+q.addEventListener("focus", openDrop);
+q.addEventListener("blur", () => setTimeout(closeDrop, 150));
+q.addEventListener("keydown", e => {
+  if (!matches.length) return;
+  if (e.key === "ArrowDown"){ e.preventDefault(); active = (active + 1) % matches.length; highlight(); }
+  else if (e.key === "ArrowUp"){ e.preventDefault(); active = (active - 1 + matches.length) % matches.length; highlight(); }
+  else if (e.key === "Enter"){ e.preventDefault(); guess(matches[active]); }
+  else if (e.key === "Escape") closeDrop();
+});
+
+$("h1").onclick = () => { updateCount(`Hint — trait: ${answer.trait}.`); $("h1").disabled = true; };
+$("h2").onclick = () => { updateCount(`Hint — the name starts with "${answer.name[0]}".`); $("h2").disabled = true; };
+$("h3").onclick = () => finish(false);
+$("new").onclick = newGame;
+$("easy").onchange = newGame;
+
+newGame();
+</script>
+</body>
+</html>

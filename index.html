@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Personadle — guess the persona (Royal)</title>
+<title>Velvet Room Archive — Persona 5 Royal guessing games</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
@@ -23,11 +23,28 @@
   .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:26px 16px 70px}
 
   .kicker{font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.32em;background:var(--bone);color:var(--ink);display:inline-block;padding:3px 10px 2px}
-  h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:clamp(36px,8.5vw,62px);line-height:.92;margin:8px 0 0;text-transform:uppercase;text-shadow:5px 5px 0 var(--blood)}
-  .brand{display:inline-block;transform:skewY(-4deg);transform-origin:left center;margin:0 0 58px;max-width:100%}
+  h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:clamp(32px,7.5vw,56px);line-height:.92;margin:8px 0 0;text-transform:uppercase;text-shadow:5px 5px 0 var(--blood)}
+  .brand{display:inline-block;transform:skewY(-4deg);transform-origin:left center;margin:0 0 46px;max-width:100%}
   .sub{font-size:13px;color:#A9A29C;margin:10px 0 0;font-style:italic}
 
-  .searchbar{position:relative;z-index:6;max-width:470px;margin-bottom:14px;clear:both}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;clear:both}
+  .tab{
+    font-family:'Anton',sans-serif;font-size:13px;letter-spacing:.13em;text-transform:uppercase;
+    background:var(--soot);color:#B7AFA8;border:2px solid #3A3634;padding:11px 17px 9px;cursor:pointer;
+    transform:skewX(var(--skew));display:flex;flex-direction:column;gap:1px;align-items:flex-start;
+  }
+  .tab > *{transform:skewX(6deg)}
+  .tab small{font-family:'Archivo',sans-serif;font-size:10px;letter-spacing:.04em;text-transform:none;color:#7E7772;font-weight:600}
+  .tab:hover{border-color:#6A625E;color:var(--bone)}
+  .tab.on{background:var(--blood);border-color:var(--blood);color:#fff}
+  .tab.on small{color:#FFD9DB}
+  .tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  .mode{display:none}
+  .mode.on{display:block}
+  .intro{font-size:13px;color:#A9A29C;margin:0 0 16px;max-width:640px;line-height:1.6}
+
+  .searchbar{position:relative;z-index:6;max-width:470px;margin-bottom:14px}
   input[type=text]{width:100%;font-family:'Archivo',sans-serif;font-size:15px;padding:13px 14px;background:var(--soot);border:2px solid #3A3634;color:var(--bone);transform:skewX(var(--skew))}
   input[type=text]:focus{outline:none;border-color:var(--blood)}
   input[type=text]::placeholder{color:#6C6561;font-style:italic}
@@ -43,17 +60,18 @@
   button{font-family:'Archivo',sans-serif;font-weight:600;font-size:12.5px;background:var(--soot);color:var(--bone);border:2px solid #3A3634;padding:9px 13px;cursor:pointer;transform:skewX(var(--skew))}
   button:hover:not(:disabled){background:var(--blood);border-color:var(--blood)}
   button:disabled{opacity:.35;cursor:not-allowed}
-  button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  .toggle{font-size:12px;color:#8E8781;letter-spacing:.04em;display:flex;align-items:center;gap:6px}
+  button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  select{font-family:'Archivo',sans-serif;font-weight:600;font-size:12.5px;background:var(--soot);color:var(--bone);border:2px solid #3A3634;padding:9px 11px;transform:skewX(var(--skew))}
+  .toggle{font-size:12px;color:#8E8781;display:flex;align-items:center;gap:6px}
   .count{font-size:12.5px;color:#A9A29C;margin:12px 0 8px;min-height:18px}
+  .score{font-size:12px;color:#8E8781;letter-spacing:.06em;margin-left:auto}
 
   .scroller{overflow-x:auto;padding-bottom:8px}
-  .grid{min-width:840px}
-  .head,.line{display:grid;grid-template-columns:158px 100px 74px 96px 120px 132px 108px;gap:6px;margin-bottom:6px}
+  .head,.line{display:grid;gap:6px;margin-bottom:6px}
   .head div{font-family:'Anton',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8E8781;text-align:center;padding:4px 2px}
   .cell{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;font-size:12.5px;font-weight:600;padding:6px 4px;transform:skewX(var(--skew));border:2px solid #2F2B29;background:var(--dead);color:#CDC6C0;line-height:1.25}
   .cell > *{transform:skewX(6deg)}
-  .cell.name{background:#151212;border-color:#4A4441;font-family:'Anton',sans-serif;font-size:13.5px;letter-spacing:.02em;text-transform:uppercase;font-weight:400}
+  .cell.name{background:#151212;border-color:#4A4441;font-family:'Anton',sans-serif;font-size:13.5px;text-transform:uppercase;font-weight:400}
   .cell.ok{background:var(--blood);border-color:var(--blood);color:#fff}
   .cell.close{background:var(--gold);border-color:var(--gold);color:#1A1206}
   .cell .arrow{font-size:16px;line-height:1}
@@ -65,10 +83,6 @@
     to{opacity:1;transform:skewX(-6deg) rotateX(0) scale(1)}
   }
   .line{perspective:600px}
-  @media (prefers-reduced-motion:reduce){
-    .cell.pending{opacity:1;transform:skewX(var(--skew))}
-    .cell.flip{animation:none}
-  }
 
   .banner{border:2px solid var(--blood);background:#120F0F;padding:16px 20px;transform:skewX(var(--skew));margin:16px 0;display:none}
   .banner.show{display:block}
@@ -79,92 +93,127 @@
 
   .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:#8E8781;margin-top:18px}
   .chip{display:inline-block;width:12px;height:12px;transform:skewX(var(--skew));vertical-align:-1px;margin-right:5px}
-  footer{margin-top:20px;font-size:11.5px;color:#6F6863;line-height:1.7;max-width:660px}
+
+  .board{display:grid;gap:7px;justify-content:center;margin:8px 0 18px}
+  .brow{display:grid;gap:7px}
+  .tile{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:clamp(16px,4.2vw,28px);background:#141212;border:2px solid #35302E;color:var(--bone);transform:skewX(var(--skew));text-transform:uppercase;user-select:none}
+  .tile span{transform:skewX(6deg)}
+  .tile.filled{border-color:#6E6763}
+  .tile.hit{background:var(--blood);border-color:var(--blood);color:#fff}
+  .tile.near{background:var(--gold);border-color:var(--gold);color:#1A1206}
+  .tile.miss{background:#151313;border-color:#232020;color:#5B5551}
+  .brow.shake{animation:shake .3s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+  .keys{display:flex;flex-direction:column;gap:6px;align-items:center;max-width:620px;margin:0 auto}
+  .krow{display:flex;gap:5px;justify-content:center;width:100%}
+  .key{flex:1 1 auto;min-width:0;padding:12px 3px;font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;background:#302C2B;color:var(--bone);border:none;transform:skewX(var(--skew));cursor:pointer;text-transform:uppercase}
+  .key.wide{flex:1.6 1 auto;font-size:11px}
+  .key.hit{background:var(--blood);color:#fff}
+  .key.near{background:var(--gold);color:#1A1206}
+  .key.miss{background:#1A1817;color:#4E4845}
+  .msg{min-height:24px;text-align:center;font-style:italic;color:var(--gold);font-size:14px;margin-bottom:8px}
+
+  .filter{display:inline-block;max-width:230px;transform:skewX(var(--skew))}
+  .filter input[type=text]{transform:none;padding:8px 11px;font-size:13px}
+  .sw{font-family:'Anton',sans-serif;letter-spacing:.12em;text-transform:uppercase;font-size:12px;padding:10px 15px 8px}
+  .sw.on{background:var(--blood);border-color:var(--blood);color:#fff}
+  .alpha{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+  .alpha button{padding:5px 9px;font-size:11px;font-weight:700;min-width:30px}
+  .alpha button.on{background:var(--blood);border-color:var(--blood);color:#fff}
+  .cols{column-width:172px;column-gap:24px}
+  .grp{break-inside:avoid;page-break-inside:avoid;margin:0 0 16px}
+  .grp h3{font-family:'Anton',sans-serif;font-weight:400;font-size:13px;letter-spacing:.24em;color:var(--blood);margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid #241F1E}
+  .grp ul{list-style:none;margin:0;padding:0}
+  .grp li{font-size:13px;padding:2.5px 0;color:#CDC6C0;cursor:pointer}
+  .grp li:hover{color:var(--bone);text-decoration:underline}
+  .grp li:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  footer{margin-top:34px;padding-top:18px;border-top:2px solid #241F1E;font-size:11.5px;color:#6F6863;line-height:1.7;max-width:680px}
   footer a{color:#8E8781}
+
+  @media (prefers-reduced-motion:reduce){
+    .cell.pending{opacity:1;transform:skewX(var(--skew))}
+    .cell.flip,.brow.shake{animation:none}
+  }
 </style>
 </head>
 <body>
 <div class="shards"><div class="shard s1"></div><div class="shard s2"></div><div class="shard s3"></div></div>
 <div class="wrap">
   <div class="brand">
-    <div class="kicker">VELVET ROOM ARCHIVE · ROYAL</div>
-    <h1>Personadle</h1>
-    <p class="sub">Guess the persona. Every attempt narrows the compendium.</p>
+    <div class="kicker">PERSONA 5 ROYAL</div>
+    <h1>Velvet Room Archive</h1>
+    <p class="sub">Three guessing games built on the Royal compendium.</p>
   </div>
 
-  <div class="searchbar">
-    <input type="text" id="q" placeholder="Type a persona name…" autocomplete="off" aria-label="Persona name">
-    <div class="drop" id="drop" role="listbox"></div>
-  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-mode="persona">Personadle<small>guess the persona by its stats</small></button>
+    <button class="tab" data-mode="skill">Skilldle<small>guess the skill</small></button>
+    <button class="tab" data-mode="word">Wordle<small>letter-by-letter guessing</small></button>
+    <button class="tab" data-mode="list">Compendium<small>every name, A to Z</small></button>
+  </nav>
 
-  <div class="bar">
-    <button id="h1" disabled>Reveal trait (4)</button>
-    <button id="h2" disabled>Reveal first letter (8)</button>
-    <button id="h3" disabled>Show answer (10)</button>
-    <button id="new">New persona</button>
-    <label class="toggle"><input type="checkbox" id="easy" checked style="accent-color:#E60012"> Skip DLC and treasure demons</label>
-  </div>
-  <div class="count" id="count">No guesses yet.</div>
-
-  <div class="banner" id="banner"><div>
-    <div class="verdict" id="verdict">REGISTERED</div>
-    <h2 id="bName">—</h2>
-    <p id="bMeta">—</p>
-    <p id="bRes">—</p>
-    <p id="bNote">—</p>
-  </div></div>
-
-  <div class="scroller"><div class="grid">
-    <div class="head">
-      <div>Persona</div><div>Arcana</div><div>Level</div><div>Affinity</div><div>Weak to</div><div>Mementos area</div><div>Type</div>
+  <section class="mode on" id="mode-persona"></section>
+  <section class="mode" id="mode-skill"></section>
+  <section class="mode" id="mode-word">
+    <p class="intro">Classic Wordle rules with persona names. The grid resizes to the answer's length and the counter tells you how many personas share it. Guesses have to be real compendium names unless you turn that off.</p>
+    <div class="bar">
+      <button id="w-new">New persona</button>
+      <button id="w-hint">Hint</button>
+      <label class="toggle" for="w-len">Length</label>
+      <select id="w-len"><option value="0">Any</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
+      <label class="toggle"><input type="checkbox" id="w-strict" checked style="accent-color:#E60012"> Real names only</label>
+      <div class="score" id="w-score">0 / 0 solved</div>
     </div>
-    <div id="rows"></div>
-  </div></div>
+    <div class="count" id="w-info">—</div>
+    <div class="board" id="w-board"></div>
+    <div class="msg" id="w-msg"></div>
+    <div class="keys" id="w-keys"></div>
+    <div class="banner" id="w-banner"><div>
+      <div class="verdict" id="w-verdict">REGISTERED</div>
+      <h2 id="w-name">—</h2>
+      <p id="w-meta">—</p>
+    </div></div>
+    <div class="legend">
+      <span><span class="chip" style="background:#E60012"></span>right letter, right slot</span>
+      <span><span class="chip" style="background:#F2C14E"></span>right letter, wrong slot</span>
+      <span><span class="chip" style="background:#2A2624;border:1px solid #444"></span>not in the name</span>
+    </div>
+  </section>
 
-  <div class="legend">
-    <span><span class="chip" style="background:#E60012"></span>exact match</span>
-    <span><span class="chip" style="background:#F2C14E"></span>partial — shares a weakness, or level within 8</span>
-    <span><span class="chip" style="background:#2A2624;border:1px solid #444"></span>no match</span>
-    <span>▲ answer is higher · ▼ answer is lower</span>
-  </div>
+  <section class="mode" id="mode-list">
+    <p class="intro">Every name in the game, alphabetically, with nothing else attached — no levels, no arcana, no costs. It's a lookup sheet for the guessing modes: use it to remember what exists without spoiling any of the attributes you're supposed to be deducing. Click a name to copy it.</p>
+    <div class="bar">
+      <button class="sw on" data-set="persona">Personas</button>
+      <button class="sw" data-set="skill">Skills</button>
+      <span class="filter"><input type="text" id="l-q" placeholder="Filter…" autocomplete="off" aria-label="Filter names"></span>
+    </div>
+    <div class="alpha" id="l-alpha"></div>
+    <div class="count" id="l-count">—</div>
+    <div class="cols" id="l-out"></div>
+  </section>
 
   <footer>
-    Levels, arcana, affinities, weaknesses, Mementos areas and traits are the real Royal values, pulled from the data
-    tables behind chinhodado's Persona 5 Royal fusion calculator. 232 personas. Fan-made and not affiliated with Atlus.
+    232 personas and 435 skills, with real base levels, arcana, inheritance types, resistance tables, Mementos areas,
+    traits, skill costs and learn levels. The stat tables were derived from the data behind
+    <a href="https://github.com/chinhodado/persona5_calculator">chinhodado's Persona 5 Royal fusion calculator</a> (Apache-2.0).
+    Persona 5 Royal is a trademark of ATLUS / SEGA — this is an unofficial fan project, uses no game assets, and is not
+    affiliated with or endorsed by them.
   </footer>
 </div>
 
 <script>
-const DATA = [["Arsène","Fool",1,"Curse",["Ice","Bless"],["Curse"],"-","Standard","Pinch Anchor"],["Jack-o'-Lantern","Magician",2,"Fire",["Ice","Wind"],["Fire"],"Qimranut / Aiyatsbus","Standard","Thermal Conduct"],["Pixie","Lovers",2,"Electric",["Gun","Ice","Curse"],["Elec","Bless"],"Qimranut / Aiyatsbus","Standard","Static Electricity"],["Agathion","Chariot",3,"Electric",["Wind"],["Gun","Elec"],"Aiyatsbus","Standard","Rare Antibody"],["Mandrake","Death",3,"Electric",["Fire"],["Elec"],"Qimranut / Aiyatsbus","Standard","Savior Bloodline"],["Bicorn","Hermit",4,"Wind",["Elec"],["Curse"],"Aiyatsbus","Standard","Striking Weight"],["Cait Sith","Magician",5,"Ailment",["Wind"],["Elec"],"-","Standard","Thermal Conduct"],["Incubus","Devil",5,"Ailment",["Fire","Bless"],["Elec"],"Aiyatsbus","Standard","Draining Mouth"],["Kelpie","Strength",6,"Wind",["Elec"],["Ice"],"Aiyatsbus","Standard","Striking Weight"],["Saki Mitama","Lovers",6,"Healing",["Wind"],["Ice"],"-","Standard","Internal Hypnosis"],["Silky","Priestess",6,"Healing",["Fire","Elec"],["Ice"],"Aiyatsbus","Standard","Intense Focus"],["Genbu","Temperance",7,"Ice",["Elec"],["Ice","Psy"],"-","Standard","Cold-Blooded"],["Succubus","Moon",7,"Curse",["Wind","Bless"],["Fire","Curse"],"Aiyatsbus","Standard","Foul Odor"],["Obariyon","Fool",8,"Physical",["Elec"],["Phys"],"Aiyatsbus","Standard","Striking Weight"],["Angel","Justice",9,"Bless",["Gun","Curse"],["Elec","Bless"],"Aiyatsbus / Kaitul","Standard","Skillful Combo"],["Berith","Hierophant",9,"Physical",["Ice"],["Gun","Fire"],"Aiyatsbus","Standard","Crisis Control"],["Hua Po","Hanged",9,"Fire",["Gun","Ice"],["Fire"],"Chemdah","Standard","Thermal Conduct"],["Koropokkuru","Hermit",9,"Ice",["Fire"],["Ice","Wind"],"Chemdah","Standard","Foul Odor"],["Mokoi","Death",9,"Ailment",["Wind"],["Elec"],"Chemdah","Standard","Gloomy Child"],["Regent","Emperor",10,"-",["Nuke"],["Phys","Gun"],"Qimranut / Aiyatsbus / Chemdah","Treasure","Ultimate Vessel"],["Slime","Chariot",10,"Curse",["Fire","Wind"],["Phys","Gun"],"Qimranut / Aiyatsbus","Standard","Rare Antibody"],["Apsaras","Priestess",11,"Ice",["Fire","Elec"],["Ice"],"Chemdah","Standard","Internal Hypnosis"],["Jack Frost","Magician",11,"Ice",["Fire"],["Ice"],"Chemdah","Standard","Frigid Bloodline"],["Kodama","Star",11,"Ailment",["Fire"],["Ice"],"Aiyatsbus","Standard","Skillful Combo"],["Koppa Tengu","Temperance",11,"Wind",["Ice","Bless"],["Wind"],"Chemdah","Standard","Intense Focus"],["Orpheus F","Fool",11,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Kushi Mitama","Councillor",12,"Healing",["Fire"],["Wind"],"-","Standard","Gluttonmouth"],["Onmoraki","Moon",12,"Curse",["Ice","Bless"],["Fire","Curse"],"Chemdah","Standard","Intense Focus"],["Ame-no-Uzume","Lovers",13,"Almighty",["Psy"],["Fire"],"Chemdah","Standard","Electric Bloodline"],["Ippon-Datara","Hermit",13,"Physical",["Ice"],["Gun","Fire","Wind","Bless","Curse"],"Chemdah","Standard","Striking Weight"],["Orpheus F Picaro","Fool",13,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Archangel","Justice",14,"Bless",["Elec","Curse"],["Bless"],"Aiyatsbus","Standard","Skillful Combo"],["Inugami","Hanged",14,"Fire",["Wind"],["Gun","Fire","Curse"],"Chemdah","Standard","Foul Odor"],["Makami","Temperance",15,"Nuclear",["Elec"],["Gun","Wind","Nuke","Bless"],"Chemdah","Standard","Skillful Technique"],["Queen's Necklace","Empress",15,"-",["Psy"],["Phys","Gun"],"Kaitul","Treasure","Ultimate Vessel"],["Shiisaa","Strength",15,"Electric",["Psy","Curse"],["Phys","Bless"],"-","Standard","Atomic Bloodline"],["Eligor","Emperor",16,"Fire",["Elec"],["Fire","Curse"],"Chemdah","Standard","Thermal Conduct"],["High Pixie","Fool",16,"Healing",["Gun","Nuke"],["Elec","Wind"],"Kaitul","Standard","Skillful Combo"],["Suzaku","Sun",16,"Nuclear",["Ice"],["Fire","Nuke"],"-","Standard","Gluttonmouth"],["Kaguya","Moon",16,"Almighty",["Fire"],["Wind","Bless","Curse"],"-","DLC","Inviolable Beauty"],["Matador","Death",17,"Psy",["Elec"],["Wind"],"-","Standard","Potent Hypnosis"],["Nekomata","Magician",17,"Ailment",["Elec"],["Psy"],"Kaitul","Standard","Foul Odor"],["Orobas","Hierophant",17,"Fire",["Ice"],["Wind","Curse"],"Kaitul","Standard","Mighty Gaze"],["Sudama","Hermit",17,"Psy",["Ice","Nuke"],["Wind"],"Chemdah","Standard","Gloomy Child"],["Black Ooze","Moon",18,"Curse",["Elec","Psy","Bless"],["Phys","Gun","Ice","Curse"],"Adyeshach","Standard","Rare Antibody"],["Shiki-Ouji","Chariot",18,"Psy",["Nuke"],["Phys","Gun","Bless","Curse"],"Chemdah","Standard","Psychic Bloodline"],["Flauros","Devil",19,"Ailment",["Ice"],["Fire","Wind","Nuke"],"-","Special","Gluttonmouth"],["Leanan Sidhe","Lovers",19,"Almighty",["Fire"],["Wind","Psy"],"Kaitul","Standard","Skillful Technique"],["Nue","Death",20,"Curse",["Fire"],["Ice","Curse"],"Chemdah","Standard","Mighty Gaze"],["Oni","Strength",20,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Stone of Scone","Fortune",20,"-",["Fire"],["Phys","Gun"],"Akzeriyyuth","Treasure","Ultimate Vessel"],["Yaksini","Empress",20,"Ice",["Nuke"],["Gun","Ice"],"Kaitul","Standard","Foul Odor"],["Izanagi","Fool",20,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Orthrus","Hanged",21,"Fire",["Ice"],["Fire","Nuke"],"Kaitul","Standard","Thermal Conduct"],["Phoenix","Faith",21,"Nuclear",["Elec"],["Ice","Wind"],"-","Standard","Atomic Bloodline"],["Jikokuten","Temperance",22,"Physical",["Curse"],["Phys","Bless"],"-","Standard","Internal Hypnosis"],["Nigi Mitama","Councillor",22,"Healing",["Elec"],["Bless","Curse"],"-","Standard","Relief Bloodline"],["Fuu-Ki","Star",23,"Wind",["Elec"],["Gun","Wind"],"Kaitul","Standard","Intense Focus"],["Sandman","Magician",23,"Wind",["Fire","Elec"],["Wind"],"Akzeriyyuth","Standard","Foul Odor"],["Izanagi Picaro","Fool",23,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Naga","Hermit",24,"Electric",["Wind"],["Gun","Elec"],"Akzeriyyuth","Standard","Striking Weight"],["Rakshasa","Strength",24,"Physical",["Wind","Bless"],["Phys","Gun","Fire","Curse"],"Kaitul","Standard","Skillful Combo"],["Sui-Ki","Moon",24,"Ice",["Nuke"],["Gun","Ice","Elec"],"Kaitul","Standard","Frigid Bloodline"],["Anzu","Hierophant",25,"Wind",["Gun","Nuke"],["Elec","Wind"],"Akzeriyyuth","Standard","Wind Bloodline"],["Kin-Ki","Chariot",25,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Koh-i-Noor","Priestess",25,"-",["Gun"],["Phys"],"Adyeshach","Treasure","Ultimate Vessel"],["Setanta","Emperor",25,"Physical",["Psy"],["Gun","Nuke"],"-","Standard","Retaliating Body"],["Kaguya Picaro","Moon",25,"Almighty",["Fire"],["Bless","Curse"],"-","DLC","Inviolable Beauty"],["Isis","Priestess",26,"Healing",["Psy"],["Bless"],"Akzeriyyuth","Standard","Savior Bloodline"],["Lamia","Empress",26,"Fire",["Ice","Nuke"],["Elec","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Take-Minakata","Hanged",26,"Electric",["Psy"],["Elec","Curse"],"Kaitul","Standard","Electric Bloodline"],["Orpheus","Fool",26,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Andras","Devil",27,"Ice",["Fire","Bless"],["Ice","Psy","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Clotho","Fortune",27,"Healing",["Ice","Nuke"],["Wind"],"-","Standard","Relief Bloodline"],["Tam Lin","Faith",27,"Almighty",["Curse"],["Phys","Fire","Wind","Bless"],"-","Special","Gluttonmouth"],["Choronzon","Magician",28,"Curse",["Bless"],["Phys","Fire"],"Kaitul","Standard","Draining Mouth"],["Pisaca","Death",28,"Curse",["Fire","Bless"],["Elec","Curse"],"Akzeriyyuth","Standard","Rare Antibody"],["Principality","Justice",29,"Bless",["Curse"],["Fire","Bless"],"-","Standard","Blessed Bloodline"],["Orpheus Picaro","Fool",29,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Ara Mitama","Chariot",30,"Nuclear",["Ice"],["Phys"],"-","Standard","Atomic Bloodline"],["Neko Shogun","Star",30,"Almighty",["Wind"],["Phys","Elec","Bless","Curse"],"-","Special","Pinch Anchor"],["Orlov","Strength",30,"-",["Curse"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Ariadne","Fortune",30,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Kurama Tengu","Hermit",31,"Wind",[],["Ice","Wind","Bless","Curse"],"Sheriruth","Standard","Skillful Combo"],["Zouchouten","Strength",31,"Electric",["Wind"],["Phys"],"-","Standard","Electric Bloodline"],["Decarabia","Councillor",32,"Fire",["Phys"],["Fire","Nuke","Curse"],"Adyeshach","Standard","Heated Bloodline"],["Lilim","Devil",32,"Ice",["Wind","Bless"],["Ice","Curse"],"Adyeshach","Standard","Cold-Blooded"],["Mitra","Temperance",33,"Bless",["Elec"],["Ice","Bless"],"-","Standard","Blessed Bloodline"],["Mothman","Moon",33,"Electric",["Gun"],["Elec","Psy"],"Adyeshach","Standard","Static Electricity"],["Anubis","Judgement",34,"Almighty",[],["Gun","Psy","Bless","Curse"],"Akzeriyyuth","Standard","Deathly Illness"],["Thunderbird","Sun",34,"Electric",["Psy","Curse"],["Elec"],"-","Standard","Electric Bloodline"],["Arahabaki","Hermit",35,"Ailment",["Psy","Nuke"],["Phys","Gun","Bless","Curse"],"Adyeshach","Standard","Immunity"],["Emperor's Amulet","Hanged",35,"-",["Elec"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Lachesis","Fortune",35,"Ice",["Elec"],["Ice","Wind"],"-","Standard","Internal Hypnosis"],["Kaiwan","Star",36,"Almighty",["Nuke"],["Gun","Psy"],"Adyeshach","Standard","Psychic Bloodline"],["Thoth","Emperor",36,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Akzeriyyuth","Standard","Skillful Technique"],["Belphegor","Tower",37,"Ice",["Fire"],["Ice","Elec","Nuke","Curse"],"Adyeshach","Standard","Intense Focus"],["Hell Biker","Death",37,"Fire",["Bless"],["Fire","Wind"],"-","Special","Internal Hypnosis"],["Legion","Fool",38,"Psy",["Bless"],["Phys","Fire","Psy","Curse"],"Adyeshach","Standard","Draining Mouth"],["White Rider","Chariot",38,"Curse",["Ice"],["Fire","Bless","Curse"],"-","Standard","Bloodstained Eyes"],["Atropos","Fortune",39,"Electric",["Fire"],["Wind"],"-","Standard","Mighty Gaze"],["Mithras","Sun",39,"Nuclear",["Psy"],["Phys","Gun","Fire","Nuke"],"Adyeshach","Standard","Skillful Technique"],["Unicorn","Faith",39,"Bless",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Daisoujou","Hierophant",40,"Bless",["Curse"],["Phys","Bless"],"-","Standard","Draining Mouth"],["Hariti","Empress",40,"Electric",["Wind"],["Psy","Bless"],"-","Standard","Electric Bloodline"],["Hope Diamond","Death",40,"-",["Ice"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Kikuri-Hime","Priestess",40,"Healing",["Fire"],["Wind","Bless"],"Sheriruth","Standard","Relief Bloodline"],["Power","Justice",41,"Bless",["Gun","Curse"],["Wind","Bless"],"Sheriruth","Standard","Internal Hypnosis"],["Red Rider","Tower",41,"Psy",["Bless"],["Curse"],"-","Standard","Ailment Hunter"],["Hecatoncheires","Hanged",42,"Physical",["Bless"],["Gun","Curse"],"-","Standard","Gluttonmouth"],["Kumbhanda","Hermit",42,"Ailment",["Psy"],["Fire","Curse"],"Sheriruth","Standard","Rare Antibody"],["Kushinada","Lovers",42,"Healing",["Ice","Nuke"],["Bless"],"Sheriruth","Standard","Savior Bloodline"],["Ose","Fool",42,"Ailment",["Bless"],["Gun","Fire","Curse"],"Sheriruth","Standard","Retaliating Body"],["Ariadne Picaro","Fortune",42,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Girimehkala","Moon",43,"Ailment",["Bless"],["Phys","Gun","Fire","Curse"],"Adyeshach","Standard","Cursed Bloodline"],["Queen Mab","Magician",43,"Almighty",["Wind"],["Fire","Elec"],"Sheriruth","Standard","Static Electricity"],["Yurlungur","Sun",43,"Electric",["Psy"],["Elec","Bless"],"-","Standard","Mouth of Savoring"],["Ananta","Councillor",44,"Nuclear",["Elec"],["Ice"],"-","Standard","Atomic Bloodline"],["Valkyrie","Strength",44,"Physical",["Fire"],["Gun","Ice","Bless"],"Sheriruth","Standard","Skillful Combo"],["Magatsu-Izanagi","Tower",44,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Byakko","Temperance",45,"Ice",["Fire","Nuke"],["Ice","Curse"],"-","Standard","Retaliating Body"],["Pazuzu","Devil",45,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Cursed Bloodline"],["Fortuna","Fortune",46,"Wind",["Elec"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Athena","Chariot",46,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Horus","Sun",47,"Almighty",["Fire"],["Elec","Bless"],"-","Standard","Potent Hypnosis"],["Narcissus","Lovers",48,"Ailment",["Fire"],["Elec","Wind","Bless"],"Sheriruth","Standard","Gluttonmouth"],["Rangda","Magician",48,"Curse",["Elec","Bless"],["Phys","Gun","Fire","Curse"],"Sheriruth","Standard","Cursed Bloodline"],["Magatsu-Izanagi Picaro","Tower",48,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Bugs","Fool",49,"Almighty",["Nuke"],["Psy","Curse"],"-","Special","Potent Hypnosis"],["Koumokuten","Hermit",49,"Physical",["Ice"],["Phys","Bless"],"-","Standard","Gluttonmouth"],["Crystal Skull","Fool",50,"-",["Wind"],["Phys","Gun"],"Sheriruth / Da'at","Treasure","Ultimate Vessel"],["Dakini","Empress",50,"Physical",[],["Gun","Fire"],"Sheriruth","Standard","Skillful Combo"],["Sarasvati","Priestess",50,"Healing",["Nuke"],["Ice","Elec"],"Sheriruth","Standard","Relief Bloodline"],["Athena Picaro","Chariot",50,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Tsukiyomi","Moon",50,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Jatayu","Hanged",51,"Wind",["Nuke"],["Ice","Wind","Bless"],"-","Standard","Wind Bloodline"],["Seth","Tower",51,"Fire",["Bless"],["Fire","Wind","Curse"],"-","Special","Potent Hypnosis"],["Barong","Emperor",52,"Electric",["Wind","Curse"],["Gun","Elec","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Garuda","Star",52,"Wind",[],["Wind","Bless"],"Sheriruth","Standard","Wind Bloodline"],["Mishaguji","Hierophant",52,"Ailment",["Ice"],["Phys","Elec","Curse"],"-","Standard","Ailment Hunter"],["Norn","Fortune",52,"Almighty",[],["Elec","Wind","Bless"],"Sheriruth","Standard","Intense Focus"],["Ganesha","Sun",53,"Ailment",["Psy"],["Phys","Gun","Wind"],"Sheriruth","Standard","Gluttonmouth"],["Skadi","Priestess",53,"Ice",[],["Ice","Curse"],"Sheriruth","Standard","Bloodstained Eyes"],["Okuninushi","Faith",54,"Psy",["Wind","Nuke"],["Elec","Psy"],"-","Standard","Psychic Bloodline"],["Pale Rider","Death",54,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Foul Stench"],["Cerberus","Chariot",55,"Fire",["Ice"],["Fire","Nuke"],"Sheriruth","Standard","Heated Bloodline"],["Raja Naga","Temperance",55,"Electric",[],["Elec"],"-","Standard","Electric Bloodline"],["Tsukiyomi Picaro","Moon",55,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Parvati","Lovers",56,"Psy",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Skillful Technique"],["Titania","Empress",56,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Sheriruth","Standard","Foul Stench"],["Asterius","Fortune",56,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Yatagarasu","Councillor",57,"Fire",["Curse"],["Wind","Bless"],"-","Standard","Potent Hypnosis"],["Baphomet","Devil",58,"Almighty",["Bless"],["Fire","Curse"],"Sheriruth","Standard","Thermal Conduct"],["Melchizedek","Justice",58,"Bless",["Wind"],["Psy","Bless","Curse"],"Da'at","Standard","Deathly Illness"],["Black Rider","Tower",59,"Curse",["Fire"],["Ice","Bless","Curse"],"-","Standard","Gloomy Child"],["Trumpeter","Judgement",59,"Almighty",[],["Ice","Elec","Bless","Curse"],"-","Special","Relentless"],["Lilith","Moon",60,"Almighty",["Fire"],["Ice","Nuke","Curse"],"Da'at","Standard","Mighty Gaze"],["Moloch","Hanged",60,"Fire",["Ice"],["Fire","Elec","Wind","Psy","Curse"],"Da'at","Standard","Immunity"],["Orichalcum","Faith",60,"-",["Bless"],["Phys","Gun"],"-","Treasure","Ultimate Vessel"],["King Frost","Emperor",61,"Ice",[],["Ice","Bless"],"Sheriruth","Standard","Frigid Bloodline"],["Chernobog","Death",62,"Ailment",["Fire","Bless"],["Gun","Ice","Elec","Curse"],"Da'at","Standard","Crisis Control"],["Seiryu","Councillor",62,"Ice",["Nuke"],["Ice"],"-","Standard","Relentless"],["Asterius Picaro","Fortune",62,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Forneus","Magician",63,"Psy",["Elec"],["Ice","Psy"],"Sheriruth","Standard","Bloodstained Eyes"],["Kali","Empress",63,"Fire",[],["Gun","Fire","Psy","Curse"],"-","Standard","Relentless"],["Hanuman","Strength",64,"Physical",["Ice"],["Gun","Psy","Bless"],"Sheriruth","Standard","Potent Hypnosis"],["Thor","Chariot",64,"Electric",[],["Phys","Elec","Bless","Curse"],"Da'at","Standard","Intense Focus"],["Yamata-no-Orochi","Judgement",64,"Ice",[],["Phys","Ice","Wind","Curse"],"Da'at","Standard","Cold-Blooded"],["Atavaka","Faith",65,"Physical",[],["Phys","Gun","Fire","Curse"],"-","Standard","Savior Bloodline"],["Thanatos","Death",65,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Oberon","Emperor",66,"Electric",["Nuke"],["Elec","Psy"],"Sheriruth","Standard","Static Electricity"],["Quetzalcoatl","Sun",66,"Wind",["Psy"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Bishamonten","Hierophant",67,"Nuclear",["Ice"],["Fire","Bless","Curse"],"-","Standard","Savior Bloodline"],["Black Frost","Fool",67,"Almighty",[],["Fire","Ice","Nuke","Curse"],"-","Special","Frigid Bloodline"],["Dominion","Justice",68,"Bless",["Elec"],["Nuke","Bless","Curse"],"Da'at","Standard","Blessed Bloodline"],["Vasuki","Star",68,"Ailment",["Curse"],["Ice","Elec"],"-","Special","Foul Stench"],["Lakshmi","Fortune",69,"Healing",["Fire"],["Ice","Bless"],"-","Standard","Wealth of Lotus"],["Thanatos Picaro","Death",69,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Byakhee","Moon",70,"Fire",["Ice","Nuke"],["Fire","Wind","Curse"],"-","Standard","Heated Bloodline"],["Loa","Hermit",70,"Curse",["Psy","Bless"],["Fire","Elec","Nuke"],"-","Standard","Draining Mouth"],["Dionysus","Councillor",71,"Ailment",[],["Elec","Bless","Curse"],"-","Standard","Pinch Anchor"],["Mot","Death",72,"Ailment",["Wind"],["Gun","Elec","Curse"],"Da'at","Standard","Mighty Gaze"],["Throne","Justice",72,"Bless",["Nuke"],["Fire","Wind","Bless"],"Da'at","Standard","Crisis Control"],["Macabre","Hanged",73,"Curse",["Bless"],["Elec","Curse"],"-","Standard","Ailment Hunter"],["Mara","Tower",73,"Psy",[],["Gun","Fire","Psy","Bless","Curse"],"Da'at","Standard","Mighty Gaze"],["Chimera","Strength",74,"Physical",["Wind","Curse"],["Fire","Ice"],"-","Standard","Foul Stench"],["Nebiros","Devil",74,"Curse",["Bless"],["Psy","Curse"],"-","Standard","Psychic Bloodline"],["Abaddon","Judgement",75,"Curse",[],["Phys","Gun","Bless","Curse"],"Da'at","Standard","Mouth of Savoring"],["Sandalphon","Moon",75,"Bless",[],["Phys","Gun","Bless","Curse"],"-","Standard","Omen"],["Asura","Sun",76,"Nuclear",["Psy"],["Fire","Nuke"],"-","Special","Atomic Hellscape"],["Cu Chulainn","Faith",76,"Almighty",["Elec"],["Phys","Gun","Wind","Bless"],"-","Standard","Potent Hypnosis"],["Kohryu","Hierophant",76,"Psy",["Nuke"],["Elec","Psy","Bless"],"-","Special","Universal Law"],["Raoul","Fool",76,"Almighty",["Bless"],["Curse"],"-","DLC","Hazy Presence"],["Gabriel","Temperance",77,"Almighty",[],["Psy","Bless"],"-","Standard","Relentless"],["Scathach","Priestess",77,"Wind",[],["Ice","Elec","Curse"],"Adyeshach","Standard","Skillful Technique"],["Raphael","Lovers",78,"Almighty",[],["Ice","Psy","Bless"],"-","Standard","Pinch Anchor"],["Sraosha","Star",80,"Bless",["Curse"],["Elec","Bless"],"-","Special","Blessed Bloodline"],["Vohu Manah","Councillor",80,"Almighty",["Wind"],["Elec","Bless","Curse"],"-","Standard","Positive Thoughts"],["Zaou-Gongen","Strength",80,"Fire",["Elec"],["Fire","Bless","Curse"],"-","Standard","Undying Fury"],["Izanagi-no-Okami","World",80,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Alilat","Empress",81,"Ice",["Fire","Curse"],["Phys","Gun","Ice","Psy"],"-","Standard","Frigid Bloodline"],["Uriel","Justice",81,"Almighty",[],["Fire","Nuke","Bless"],"-","Standard","Mouth of Savoring"],["Messiah","Judgement",81,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Attis","Hanged",82,"Fire",["Curse"],["Fire","Wind"],"-","Standard","Vitality of the Tree"],["Baal","Emperor",82,"Wind",[],["Fire","Wind","Bless"],"-","Standard","Wind Bloodline"],["Belial","Devil",82,"Curse",[],["Phys","Ice","Curse"],"-","Standard","Bloodstained Eyes"],["Shiva","Judgement",82,"Psy",["Nuke"],["Ice","Elec","Psy","Bless","Curse"],"-","Special","Psychic Bloodline"],["Alice","Death",83,"Curse",["Bless"],["Psy","Nuke","Curse"],"-","Special","Just Die"],["Cybele","Priestess",83,"Healing",["Elec"],["Fire","Bless"],"-","Standard","Linked Bloodline"],["Surt","Magician",83,"Fire",["Ice"],["Gun","Fire","Elec","Nuke"],"-","Standard","Heated Bloodline"],["Vishnu","Fool",83,"Almighty",["Fire"],["Ice","Bless","Curse"],"-","Standard","Vahana's Wings"],["Ardha","Temperance",84,"Almighty",[],["Phys","Ice","Elec"],"-","Special","Naranari"],["Hastur","Star",84,"Wind",[],["Fire","Wind","Psy","Curse"],"-","Standard","Mouth of Savoring"],["Odin","Emperor",84,"Electric",[],["Elec","Wind","Bless","Curse"],"-","Standard","Bargain Bolts"],["Siegfried","Faith",84,"Physical",["Nuke"],["Phys","Gun","Ice","Elec"],"-","Standard","Retaliating Body"],["Ishtar","Lovers",85,"Healing",["Wind"],["Elec"],"-","Standard","Grace of Mother"],["Mother Harlot","Empress",85,"Ice",["Bless"],["Elec","Curse"],"-","Standard","Ghost Nest"],["Fafnir","Hermit",86,"Nuclear",[],["Phys","Gun","Fire","Elec","Nuke"],"-","Standard","Ailment Hunter"],["Futsunushi","Magician",86,"Physical",["Nuke"],["Phys"],"-","Standard","Will of the Sword"],["Beelzebub","Devil",87,"Curse",["Bless"],["Fire","Curse"],"-","Standard","Mother's Lament"],["Michael","Judgement",87,"Almighty",[],["Gun","Bless","Curse"],"-","Special","Potent Hypnosis"],["Yoshitsune","Tower",87,"Physical",[],["Phys","Fire","Elec","Bless"],"-","Special","Retaliating Body"],["Chi You","Chariot",88,"Psy",["Nuke"],["Phys","Gun","Psy"],"-","Special","Chi You's Blessing"],["Metatron","Justice",89,"Bless",["Elec","Curse"],["Wind","Psy","Nuke"],"-","Special","Martyr's Gift"],["Ongyo-Ki","Hermit",89,"Physical",[],["Phys","Bless","Curse"],"-","Special","Demon's Bite"],["Izanagi-no-Okami Picaro","World",89,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Mada","Tower",90,"Fire",["Ice"],["Fire","Psy","Nuke"],"-","Standard","Drunken Passion"],["Messiah Picaro","Judgement",90,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Satan","Judgement",92,"Ice",[],["Gun","Ice","Curse"],"-","Standard","Cocytus"],["Lucifer","Star",93,"Almighty",["Bless"],["Phys","Gun","Fire","Ice","Elec","Wind","Curse"],"-","Special","Allure of Wisdom"],["Maria","Faith",93,"Healing",["Fire"],["Elec","Wind","Bless"],"-","Standard","Ave Maria"],["Satanael","Fool",95,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke","Bless","Curse"],"-","Special","Pagan Allure"]];
-const LIST = DATA.map(r => ({name:r[0],arcana:r[1],level:r[2],aff:r[3],weak:r[4],res:r[5],area:r[6],type:r[7],trait:r[8]}));
+const PERSONA_DATA = [["Arsène","Fool",1,"Curse",["Ice","Bless"],["Curse"],"-","Standard","Pinch Anchor"],["Jack-o'-Lantern","Magician",2,"Fire",["Ice","Wind"],["Fire"],"Qimranut / Aiyatsbus","Standard","Thermal Conduct"],["Pixie","Lovers",2,"Electric",["Gun","Ice","Curse"],["Elec","Bless"],"Qimranut / Aiyatsbus","Standard","Static Electricity"],["Agathion","Chariot",3,"Electric",["Wind"],["Gun","Elec"],"Aiyatsbus","Standard","Rare Antibody"],["Mandrake","Death",3,"Electric",["Fire"],["Elec"],"Qimranut / Aiyatsbus","Standard","Savior Bloodline"],["Bicorn","Hermit",4,"Wind",["Elec"],["Curse"],"Aiyatsbus","Standard","Striking Weight"],["Cait Sith","Magician",5,"Ailment",["Wind"],["Elec"],"-","Standard","Thermal Conduct"],["Incubus","Devil",5,"Ailment",["Fire","Bless"],["Elec"],"Aiyatsbus","Standard","Draining Mouth"],["Kelpie","Strength",6,"Wind",["Elec"],["Ice"],"Aiyatsbus","Standard","Striking Weight"],["Saki Mitama","Lovers",6,"Healing",["Wind"],["Ice"],"-","Standard","Internal Hypnosis"],["Silky","Priestess",6,"Healing",["Fire","Elec"],["Ice"],"Aiyatsbus","Standard","Intense Focus"],["Genbu","Temperance",7,"Ice",["Elec"],["Ice","Psy"],"-","Standard","Cold-Blooded"],["Succubus","Moon",7,"Curse",["Wind","Bless"],["Fire","Curse"],"Aiyatsbus","Standard","Foul Odor"],["Obariyon","Fool",8,"Physical",["Elec"],["Phys"],"Aiyatsbus","Standard","Striking Weight"],["Angel","Justice",9,"Bless",["Gun","Curse"],["Elec","Bless"],"Aiyatsbus / Kaitul","Standard","Skillful Combo"],["Berith","Hierophant",9,"Physical",["Ice"],["Gun","Fire"],"Aiyatsbus","Standard","Crisis Control"],["Hua Po","Hanged",9,"Fire",["Gun","Ice"],["Fire"],"Chemdah","Standard","Thermal Conduct"],["Koropokkuru","Hermit",9,"Ice",["Fire"],["Ice","Wind"],"Chemdah","Standard","Foul Odor"],["Mokoi","Death",9,"Ailment",["Wind"],["Elec"],"Chemdah","Standard","Gloomy Child"],["Regent","Emperor",10,"-",["Nuke"],["Phys","Gun"],"Qimranut / Aiyatsbus / Chemdah","Treasure","Ultimate Vessel"],["Slime","Chariot",10,"Curse",["Fire","Wind"],["Phys","Gun"],"Qimranut / Aiyatsbus","Standard","Rare Antibody"],["Apsaras","Priestess",11,"Ice",["Fire","Elec"],["Ice"],"Chemdah","Standard","Internal Hypnosis"],["Jack Frost","Magician",11,"Ice",["Fire"],["Ice"],"Chemdah","Standard","Frigid Bloodline"],["Kodama","Star",11,"Ailment",["Fire"],["Ice"],"Aiyatsbus","Standard","Skillful Combo"],["Koppa Tengu","Temperance",11,"Wind",["Ice","Bless"],["Wind"],"Chemdah","Standard","Intense Focus"],["Orpheus F","Fool",11,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Kushi Mitama","Councillor",12,"Healing",["Fire"],["Wind"],"-","Standard","Gluttonmouth"],["Onmoraki","Moon",12,"Curse",["Ice","Bless"],["Fire","Curse"],"Chemdah","Standard","Intense Focus"],["Ame-no-Uzume","Lovers",13,"Almighty",["Psy"],["Fire"],"Chemdah","Standard","Electric Bloodline"],["Ippon-Datara","Hermit",13,"Physical",["Ice"],["Gun","Fire","Wind","Bless","Curse"],"Chemdah","Standard","Striking Weight"],["Orpheus F Picaro","Fool",13,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Archangel","Justice",14,"Bless",["Elec","Curse"],["Bless"],"Aiyatsbus","Standard","Skillful Combo"],["Inugami","Hanged",14,"Fire",["Wind"],["Gun","Fire","Curse"],"Chemdah","Standard","Foul Odor"],["Makami","Temperance",15,"Nuclear",["Elec"],["Gun","Wind","Nuke","Bless"],"Chemdah","Standard","Skillful Technique"],["Queen's Necklace","Empress",15,"-",["Psy"],["Phys","Gun"],"Kaitul","Treasure","Ultimate Vessel"],["Shiisaa","Strength",15,"Electric",["Psy","Curse"],["Phys","Bless"],"-","Standard","Atomic Bloodline"],["Eligor","Emperor",16,"Fire",["Elec"],["Fire","Curse"],"Chemdah","Standard","Thermal Conduct"],["High Pixie","Fool",16,"Healing",["Gun","Nuke"],["Elec","Wind"],"Kaitul","Standard","Skillful Combo"],["Suzaku","Sun",16,"Nuclear",["Ice"],["Fire","Nuke"],"-","Standard","Gluttonmouth"],["Kaguya","Moon",16,"Almighty",["Fire"],["Wind","Bless","Curse"],"-","DLC","Inviolable Beauty"],["Matador","Death",17,"Psy",["Elec"],["Wind"],"-","Standard","Potent Hypnosis"],["Nekomata","Magician",17,"Ailment",["Elec"],["Psy"],"Kaitul","Standard","Foul Odor"],["Orobas","Hierophant",17,"Fire",["Ice"],["Wind","Curse"],"Kaitul","Standard","Mighty Gaze"],["Sudama","Hermit",17,"Psy",["Ice","Nuke"],["Wind"],"Chemdah","Standard","Gloomy Child"],["Black Ooze","Moon",18,"Curse",["Elec","Psy","Bless"],["Phys","Gun","Ice","Curse"],"Adyeshach","Standard","Rare Antibody"],["Shiki-Ouji","Chariot",18,"Psy",["Nuke"],["Phys","Gun","Bless","Curse"],"Chemdah","Standard","Psychic Bloodline"],["Flauros","Devil",19,"Ailment",["Ice"],["Fire","Wind","Nuke"],"-","Special","Gluttonmouth"],["Leanan Sidhe","Lovers",19,"Almighty",["Fire"],["Wind","Psy"],"Kaitul","Standard","Skillful Technique"],["Nue","Death",20,"Curse",["Fire"],["Ice","Curse"],"Chemdah","Standard","Mighty Gaze"],["Oni","Strength",20,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Stone of Scone","Fortune",20,"-",["Fire"],["Phys","Gun"],"Akzeriyyuth","Treasure","Ultimate Vessel"],["Yaksini","Empress",20,"Ice",["Nuke"],["Gun","Ice"],"Kaitul","Standard","Foul Odor"],["Izanagi","Fool",20,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Orthrus","Hanged",21,"Fire",["Ice"],["Fire","Nuke"],"Kaitul","Standard","Thermal Conduct"],["Phoenix","Faith",21,"Nuclear",["Elec"],["Ice","Wind"],"-","Standard","Atomic Bloodline"],["Jikokuten","Temperance",22,"Physical",["Curse"],["Phys","Bless"],"-","Standard","Internal Hypnosis"],["Nigi Mitama","Councillor",22,"Healing",["Elec"],["Bless","Curse"],"-","Standard","Relief Bloodline"],["Fuu-Ki","Star",23,"Wind",["Elec"],["Gun","Wind"],"Kaitul","Standard","Intense Focus"],["Sandman","Magician",23,"Wind",["Fire","Elec"],["Wind"],"Akzeriyyuth","Standard","Foul Odor"],["Izanagi Picaro","Fool",23,"Almighty",["Wind"],["Elec","Curse"],"-","DLC","God Maker"],["Naga","Hermit",24,"Electric",["Wind"],["Gun","Elec"],"Akzeriyyuth","Standard","Striking Weight"],["Rakshasa","Strength",24,"Physical",["Wind","Bless"],["Phys","Gun","Fire","Curse"],"Kaitul","Standard","Skillful Combo"],["Sui-Ki","Moon",24,"Ice",["Nuke"],["Gun","Ice","Elec"],"Kaitul","Standard","Frigid Bloodline"],["Anzu","Hierophant",25,"Wind",["Gun","Nuke"],["Elec","Wind"],"Akzeriyyuth","Standard","Wind Bloodline"],["Kin-Ki","Chariot",25,"Physical",[],["Phys","Gun"],"Kaitul","Standard","Retaliating Body"],["Koh-i-Noor","Priestess",25,"-",["Gun"],["Phys"],"Adyeshach","Treasure","Ultimate Vessel"],["Setanta","Emperor",25,"Physical",["Psy"],["Gun","Nuke"],"-","Standard","Retaliating Body"],["Kaguya Picaro","Moon",25,"Almighty",["Fire"],["Bless","Curse"],"-","DLC","Inviolable Beauty"],["Isis","Priestess",26,"Healing",["Psy"],["Bless"],"Akzeriyyuth","Standard","Savior Bloodline"],["Lamia","Empress",26,"Fire",["Ice","Nuke"],["Elec","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Take-Minakata","Hanged",26,"Electric",["Psy"],["Elec","Curse"],"Kaitul","Standard","Electric Bloodline"],["Orpheus","Fool",26,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Andras","Devil",27,"Ice",["Fire","Bless"],["Ice","Psy","Curse"],"Akzeriyyuth","Standard","Foul Odor"],["Clotho","Fortune",27,"Healing",["Ice","Nuke"],["Wind"],"-","Standard","Relief Bloodline"],["Tam Lin","Faith",27,"Almighty",["Curse"],["Phys","Fire","Wind","Bless"],"-","Special","Gluttonmouth"],["Choronzon","Magician",28,"Curse",["Bless"],["Phys","Fire"],"Kaitul","Standard","Draining Mouth"],["Pisaca","Death",28,"Curse",["Fire","Bless"],["Elec","Curse"],"Akzeriyyuth","Standard","Rare Antibody"],["Principality","Justice",29,"Bless",["Curse"],["Fire","Bless"],"-","Standard","Blessed Bloodline"],["Orpheus Picaro","Fool",29,"Almighty",["Elec","Curse"],["Bless"],"-","DLC","Circle of Sadness"],["Ara Mitama","Chariot",30,"Nuclear",["Ice"],["Phys"],"-","Standard","Atomic Bloodline"],["Neko Shogun","Star",30,"Almighty",["Wind"],["Phys","Elec","Bless","Curse"],"-","Special","Pinch Anchor"],["Orlov","Strength",30,"-",["Curse"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Ariadne","Fortune",30,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Kurama Tengu","Hermit",31,"Wind",[],["Ice","Wind","Bless","Curse"],"Sheriruth","Standard","Skillful Combo"],["Zouchouten","Strength",31,"Electric",["Wind"],["Phys"],"-","Standard","Electric Bloodline"],["Decarabia","Councillor",32,"Fire",["Phys"],["Fire","Nuke","Curse"],"Adyeshach","Standard","Heated Bloodline"],["Lilim","Devil",32,"Ice",["Wind","Bless"],["Ice","Curse"],"Adyeshach","Standard","Cold-Blooded"],["Mitra","Temperance",33,"Bless",["Elec"],["Ice","Bless"],"-","Standard","Blessed Bloodline"],["Mothman","Moon",33,"Electric",["Gun"],["Elec","Psy"],"Adyeshach","Standard","Static Electricity"],["Anubis","Judgement",34,"Almighty",[],["Gun","Psy","Bless","Curse"],"Akzeriyyuth","Standard","Deathly Illness"],["Thunderbird","Sun",34,"Electric",["Psy","Curse"],["Elec"],"-","Standard","Electric Bloodline"],["Arahabaki","Hermit",35,"Ailment",["Psy","Nuke"],["Phys","Gun","Bless","Curse"],"Adyeshach","Standard","Immunity"],["Emperor's Amulet","Hanged",35,"-",["Elec"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Lachesis","Fortune",35,"Ice",["Elec"],["Ice","Wind"],"-","Standard","Internal Hypnosis"],["Kaiwan","Star",36,"Almighty",["Nuke"],["Gun","Psy"],"Adyeshach","Standard","Psychic Bloodline"],["Thoth","Emperor",36,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Akzeriyyuth","Standard","Skillful Technique"],["Belphegor","Tower",37,"Ice",["Fire"],["Ice","Elec","Nuke","Curse"],"Adyeshach","Standard","Intense Focus"],["Hell Biker","Death",37,"Fire",["Bless"],["Fire","Wind"],"-","Special","Internal Hypnosis"],["Legion","Fool",38,"Psy",["Bless"],["Phys","Fire","Psy","Curse"],"Adyeshach","Standard","Draining Mouth"],["White Rider","Chariot",38,"Curse",["Ice"],["Fire","Bless","Curse"],"-","Standard","Bloodstained Eyes"],["Atropos","Fortune",39,"Electric",["Fire"],["Wind"],"-","Standard","Mighty Gaze"],["Mithras","Sun",39,"Nuclear",["Psy"],["Phys","Gun","Fire","Nuke"],"Adyeshach","Standard","Skillful Technique"],["Unicorn","Faith",39,"Bless",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Daisoujou","Hierophant",40,"Bless",["Curse"],["Phys","Bless"],"-","Standard","Draining Mouth"],["Hariti","Empress",40,"Electric",["Wind"],["Psy","Bless"],"-","Standard","Electric Bloodline"],["Hope Diamond","Death",40,"-",["Ice"],["Phys","Gun"],"Sheriruth","Treasure","Ultimate Vessel"],["Kikuri-Hime","Priestess",40,"Healing",["Fire"],["Wind","Bless"],"Sheriruth","Standard","Relief Bloodline"],["Power","Justice",41,"Bless",["Gun","Curse"],["Wind","Bless"],"Sheriruth","Standard","Internal Hypnosis"],["Red Rider","Tower",41,"Psy",["Bless"],["Curse"],"-","Standard","Ailment Hunter"],["Hecatoncheires","Hanged",42,"Physical",["Bless"],["Gun","Curse"],"-","Standard","Gluttonmouth"],["Kumbhanda","Hermit",42,"Ailment",["Psy"],["Fire","Curse"],"Sheriruth","Standard","Rare Antibody"],["Kushinada","Lovers",42,"Healing",["Ice","Nuke"],["Bless"],"Sheriruth","Standard","Savior Bloodline"],["Ose","Fool",42,"Ailment",["Bless"],["Gun","Fire","Curse"],"Sheriruth","Standard","Retaliating Body"],["Ariadne Picaro","Fortune",42,"Almighty",["Psy"],["Gun","Nuke","Bless"],"-","DLC","Tag Team"],["Girimehkala","Moon",43,"Ailment",["Bless"],["Phys","Gun","Fire","Curse"],"Adyeshach","Standard","Cursed Bloodline"],["Queen Mab","Magician",43,"Almighty",["Wind"],["Fire","Elec"],"Sheriruth","Standard","Static Electricity"],["Yurlungur","Sun",43,"Electric",["Psy"],["Elec","Bless"],"-","Standard","Mouth of Savoring"],["Ananta","Councillor",44,"Nuclear",["Elec"],["Ice"],"-","Standard","Atomic Bloodline"],["Valkyrie","Strength",44,"Physical",["Fire"],["Gun","Ice","Bless"],"Sheriruth","Standard","Skillful Combo"],["Magatsu-Izanagi","Tower",44,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Byakko","Temperance",45,"Ice",["Fire","Nuke"],["Ice","Curse"],"-","Standard","Retaliating Body"],["Pazuzu","Devil",45,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Cursed Bloodline"],["Fortuna","Fortune",46,"Wind",["Elec"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Athena","Chariot",46,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Horus","Sun",47,"Almighty",["Fire"],["Elec","Bless"],"-","Standard","Potent Hypnosis"],["Narcissus","Lovers",48,"Ailment",["Fire"],["Elec","Wind","Bless"],"Sheriruth","Standard","Gluttonmouth"],["Rangda","Magician",48,"Curse",["Elec","Bless"],["Phys","Gun","Fire","Curse"],"Sheriruth","Standard","Cursed Bloodline"],["Magatsu-Izanagi Picaro","Tower",48,"Almighty",["Nuke"],["Gun","Bless","Curse"],"-","DLC","Hollow Jester"],["Bugs","Fool",49,"Almighty",["Nuke"],["Psy","Curse"],"-","Special","Potent Hypnosis"],["Koumokuten","Hermit",49,"Physical",["Ice"],["Phys","Bless"],"-","Standard","Gluttonmouth"],["Crystal Skull","Fool",50,"-",["Wind"],["Phys","Gun"],"Sheriruth / Da'at","Treasure","Ultimate Vessel"],["Dakini","Empress",50,"Physical",[],["Gun","Fire"],"Sheriruth","Standard","Skillful Combo"],["Sarasvati","Priestess",50,"Healing",["Nuke"],["Ice","Elec"],"Sheriruth","Standard","Relief Bloodline"],["Athena Picaro","Chariot",50,"Almighty",["Elec"],["Phys","Gun"],"-","DLC","Grace of the Olive"],["Tsukiyomi","Moon",50,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Jatayu","Hanged",51,"Wind",["Nuke"],["Ice","Wind","Bless"],"-","Standard","Wind Bloodline"],["Seth","Tower",51,"Fire",["Bless"],["Fire","Wind","Curse"],"-","Special","Potent Hypnosis"],["Barong","Emperor",52,"Electric",["Wind","Curse"],["Gun","Elec","Bless"],"Sheriruth","Standard","Blessed Bloodline"],["Garuda","Star",52,"Wind",[],["Wind","Bless"],"Sheriruth","Standard","Wind Bloodline"],["Mishaguji","Hierophant",52,"Ailment",["Ice"],["Phys","Elec","Curse"],"-","Standard","Ailment Hunter"],["Norn","Fortune",52,"Almighty",[],["Elec","Wind","Bless"],"Sheriruth","Standard","Intense Focus"],["Ganesha","Sun",53,"Ailment",["Psy"],["Phys","Gun","Wind"],"Sheriruth","Standard","Gluttonmouth"],["Skadi","Priestess",53,"Ice",[],["Ice","Curse"],"Sheriruth","Standard","Bloodstained Eyes"],["Okuninushi","Faith",54,"Psy",["Wind","Nuke"],["Elec","Psy"],"-","Standard","Psychic Bloodline"],["Pale Rider","Death",54,"Curse",["Bless"],["Wind","Curse"],"-","Standard","Foul Stench"],["Cerberus","Chariot",55,"Fire",["Ice"],["Fire","Nuke"],"Sheriruth","Standard","Heated Bloodline"],["Raja Naga","Temperance",55,"Electric",[],["Elec"],"-","Standard","Electric Bloodline"],["Tsukiyomi Picaro","Moon",55,"Almighty",["Nuke"],["Phys","Bless","Curse"],"-","DLC","Bolstering Force"],["Parvati","Lovers",56,"Psy",["Curse"],["Ice","Psy","Bless"],"Sheriruth","Standard","Skillful Technique"],["Titania","Empress",56,"Nuclear",["Psy"],["Nuke","Bless","Curse"],"Sheriruth","Standard","Foul Stench"],["Asterius","Fortune",56,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Yatagarasu","Councillor",57,"Fire",["Curse"],["Wind","Bless"],"-","Standard","Potent Hypnosis"],["Baphomet","Devil",58,"Almighty",["Bless"],["Fire","Curse"],"Sheriruth","Standard","Thermal Conduct"],["Melchizedek","Justice",58,"Bless",["Wind"],["Psy","Bless","Curse"],"Da'at","Standard","Deathly Illness"],["Black Rider","Tower",59,"Curse",["Fire"],["Ice","Bless","Curse"],"-","Standard","Gloomy Child"],["Trumpeter","Judgement",59,"Almighty",[],["Ice","Elec","Bless","Curse"],"-","Special","Relentless"],["Lilith","Moon",60,"Almighty",["Fire"],["Ice","Nuke","Curse"],"Da'at","Standard","Mighty Gaze"],["Moloch","Hanged",60,"Fire",["Ice"],["Fire","Elec","Wind","Psy","Curse"],"Da'at","Standard","Immunity"],["Orichalcum","Faith",60,"-",["Bless"],["Phys","Gun"],"-","Treasure","Ultimate Vessel"],["King Frost","Emperor",61,"Ice",[],["Ice","Bless"],"Sheriruth","Standard","Frigid Bloodline"],["Chernobog","Death",62,"Ailment",["Fire","Bless"],["Gun","Ice","Elec","Curse"],"Da'at","Standard","Crisis Control"],["Seiryu","Councillor",62,"Ice",["Nuke"],["Ice"],"-","Standard","Relentless"],["Asterius Picaro","Fortune",62,"Almighty",["Ice"],["Fire","Psy","Curse"],"-","DLC","Frenzied Bull"],["Forneus","Magician",63,"Psy",["Elec"],["Ice","Psy"],"Sheriruth","Standard","Bloodstained Eyes"],["Kali","Empress",63,"Fire",[],["Gun","Fire","Psy","Curse"],"-","Standard","Relentless"],["Hanuman","Strength",64,"Physical",["Ice"],["Gun","Psy","Bless"],"Sheriruth","Standard","Potent Hypnosis"],["Thor","Chariot",64,"Electric",[],["Phys","Elec","Bless","Curse"],"Da'at","Standard","Intense Focus"],["Yamata-no-Orochi","Judgement",64,"Ice",[],["Phys","Ice","Wind","Curse"],"Da'at","Standard","Cold-Blooded"],["Atavaka","Faith",65,"Physical",[],["Phys","Gun","Fire","Curse"],"-","Standard","Savior Bloodline"],["Thanatos","Death",65,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Oberon","Emperor",66,"Electric",["Nuke"],["Elec","Psy"],"Sheriruth","Standard","Static Electricity"],["Quetzalcoatl","Sun",66,"Wind",["Psy"],["Fire","Wind"],"-","Standard","Wind Bloodline"],["Bishamonten","Hierophant",67,"Nuclear",["Ice"],["Fire","Bless","Curse"],"-","Standard","Savior Bloodline"],["Black Frost","Fool",67,"Almighty",[],["Fire","Ice","Nuke","Curse"],"-","Special","Frigid Bloodline"],["Dominion","Justice",68,"Bless",["Elec"],["Nuke","Bless","Curse"],"Da'at","Standard","Blessed Bloodline"],["Vasuki","Star",68,"Ailment",["Curse"],["Ice","Elec"],"-","Special","Foul Stench"],["Lakshmi","Fortune",69,"Healing",["Fire"],["Ice","Bless"],"-","Standard","Wealth of Lotus"],["Thanatos Picaro","Death",69,"Almighty",["Bless"],["Phys","Curse"],"-","DLC","Iron Heart"],["Byakhee","Moon",70,"Fire",["Ice","Nuke"],["Fire","Wind","Curse"],"-","Standard","Heated Bloodline"],["Loa","Hermit",70,"Curse",["Psy","Bless"],["Fire","Elec","Nuke"],"-","Standard","Draining Mouth"],["Dionysus","Councillor",71,"Ailment",[],["Elec","Bless","Curse"],"-","Standard","Pinch Anchor"],["Mot","Death",72,"Ailment",["Wind"],["Gun","Elec","Curse"],"Da'at","Standard","Mighty Gaze"],["Throne","Justice",72,"Bless",["Nuke"],["Fire","Wind","Bless"],"Da'at","Standard","Crisis Control"],["Macabre","Hanged",73,"Curse",["Bless"],["Elec","Curse"],"-","Standard","Ailment Hunter"],["Mara","Tower",73,"Psy",[],["Gun","Fire","Psy","Bless","Curse"],"Da'at","Standard","Mighty Gaze"],["Chimera","Strength",74,"Physical",["Wind","Curse"],["Fire","Ice"],"-","Standard","Foul Stench"],["Nebiros","Devil",74,"Curse",["Bless"],["Psy","Curse"],"-","Standard","Psychic Bloodline"],["Abaddon","Judgement",75,"Curse",[],["Phys","Gun","Bless","Curse"],"Da'at","Standard","Mouth of Savoring"],["Sandalphon","Moon",75,"Bless",[],["Phys","Gun","Bless","Curse"],"-","Standard","Omen"],["Asura","Sun",76,"Nuclear",["Psy"],["Fire","Nuke"],"-","Special","Atomic Hellscape"],["Cu Chulainn","Faith",76,"Almighty",["Elec"],["Phys","Gun","Wind","Bless"],"-","Standard","Potent Hypnosis"],["Kohryu","Hierophant",76,"Psy",["Nuke"],["Elec","Psy","Bless"],"-","Special","Universal Law"],["Raoul","Fool",76,"Almighty",["Bless"],["Curse"],"-","DLC","Hazy Presence"],["Gabriel","Temperance",77,"Almighty",[],["Psy","Bless"],"-","Standard","Relentless"],["Scathach","Priestess",77,"Wind",[],["Ice","Elec","Curse"],"Adyeshach","Standard","Skillful Technique"],["Raphael","Lovers",78,"Almighty",[],["Ice","Psy","Bless"],"-","Standard","Pinch Anchor"],["Sraosha","Star",80,"Bless",["Curse"],["Elec","Bless"],"-","Special","Blessed Bloodline"],["Vohu Manah","Councillor",80,"Almighty",["Wind"],["Elec","Bless","Curse"],"-","Standard","Positive Thoughts"],["Zaou-Gongen","Strength",80,"Fire",["Elec"],["Fire","Bless","Curse"],"-","Standard","Undying Fury"],["Izanagi-no-Okami","World",80,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Alilat","Empress",81,"Ice",["Fire","Curse"],["Phys","Gun","Ice","Psy"],"-","Standard","Frigid Bloodline"],["Uriel","Justice",81,"Almighty",[],["Fire","Nuke","Bless"],"-","Standard","Mouth of Savoring"],["Messiah","Judgement",81,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Attis","Hanged",82,"Fire",["Curse"],["Fire","Wind"],"-","Standard","Vitality of the Tree"],["Baal","Emperor",82,"Wind",[],["Fire","Wind","Bless"],"-","Standard","Wind Bloodline"],["Belial","Devil",82,"Curse",[],["Phys","Ice","Curse"],"-","Standard","Bloodstained Eyes"],["Shiva","Judgement",82,"Psy",["Nuke"],["Ice","Elec","Psy","Bless","Curse"],"-","Special","Psychic Bloodline"],["Alice","Death",83,"Curse",["Bless"],["Psy","Nuke","Curse"],"-","Special","Just Die"],["Cybele","Priestess",83,"Healing",["Elec"],["Fire","Bless"],"-","Standard","Linked Bloodline"],["Surt","Magician",83,"Fire",["Ice"],["Gun","Fire","Elec","Nuke"],"-","Standard","Heated Bloodline"],["Vishnu","Fool",83,"Almighty",["Fire"],["Ice","Bless","Curse"],"-","Standard","Vahana's Wings"],["Ardha","Temperance",84,"Almighty",[],["Phys","Ice","Elec"],"-","Special","Naranari"],["Hastur","Star",84,"Wind",[],["Fire","Wind","Psy","Curse"],"-","Standard","Mouth of Savoring"],["Odin","Emperor",84,"Electric",[],["Elec","Wind","Bless","Curse"],"-","Standard","Bargain Bolts"],["Siegfried","Faith",84,"Physical",["Nuke"],["Phys","Gun","Ice","Elec"],"-","Standard","Retaliating Body"],["Ishtar","Lovers",85,"Healing",["Wind"],["Elec"],"-","Standard","Grace of Mother"],["Mother Harlot","Empress",85,"Ice",["Bless"],["Elec","Curse"],"-","Standard","Ghost Nest"],["Fafnir","Hermit",86,"Nuclear",[],["Phys","Gun","Fire","Elec","Nuke"],"-","Standard","Ailment Hunter"],["Futsunushi","Magician",86,"Physical",["Nuke"],["Phys"],"-","Standard","Will of the Sword"],["Beelzebub","Devil",87,"Curse",["Bless"],["Fire","Curse"],"-","Standard","Mother's Lament"],["Michael","Judgement",87,"Almighty",[],["Gun","Bless","Curse"],"-","Special","Potent Hypnosis"],["Yoshitsune","Tower",87,"Physical",[],["Phys","Fire","Elec","Bless"],"-","Special","Retaliating Body"],["Chi You","Chariot",88,"Psy",["Nuke"],["Phys","Gun","Psy"],"-","Special","Chi You's Blessing"],["Metatron","Justice",89,"Bless",["Elec","Curse"],["Wind","Psy","Nuke"],"-","Special","Martyr's Gift"],["Ongyo-Ki","Hermit",89,"Physical",[],["Phys","Bless","Curse"],"-","Special","Demon's Bite"],["Izanagi-no-Okami Picaro","World",89,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke"],"-","DLC","Country Maker"],["Mada","Tower",90,"Fire",["Ice"],["Fire","Psy","Nuke"],"-","Standard","Drunken Passion"],["Messiah Picaro","Judgement",90,"Almighty",["Curse"],["Fire","Ice","Elec","Wind","Psy","Nuke","Bless"],"-","DLC","Hallowed Spirit"],["Satan","Judgement",92,"Ice",[],["Gun","Ice","Curse"],"-","Standard","Cocytus"],["Lucifer","Star",93,"Almighty",["Bless"],["Phys","Gun","Fire","Ice","Elec","Wind","Curse"],"-","Special","Allure of Wisdom"],["Maria","Faith",93,"Healing",["Fire"],["Elec","Wind","Bless"],"-","Standard","Ave Maria"],["Satanael","Fool",95,"Almighty",[],["Phys","Gun","Fire","Ice","Elec","Wind","Psy","Nuke","Bless","Curse"],"-","Special","Pagan Allure"]];
+const SKILL_DATA = [["Absorb Bless","Passive",0,"None","Passive",2,82,["Level up"],"Absorb Bless attacks."],["Absorb Curse","Passive",0,"None","Passive",4,73,["Level up","Fusion"],"Absorb Curse attacks."],["Absorb Elec","Passive",0,"None","Passive",0,0,["Card"],"Absorb Electric attacks."],["Absorb Fire","Passive",0,"None","Passive",1,64,["Level up","Card","Fusion"],"Absorb Fire attacks."],["Absorb Ice","Passive",0,"None","Passive",2,66,["Level up"],"Absorb Ice attacks."],["Absorb Nuke","Passive",0,"None","Passive",1,92,["Level up"],"Absorb Nuclear attacks."],["Absorb Phys","Passive",0,"None","Passive",3,80,["Level up","Fusion"],"Absorb Phys attacks."],["Absorb Psy","Passive",0,"None","Passive",1,92,["Level up"],"Absorb Psy attacks."],["Absorb Wind","Passive",0,"None","Passive",1,0,["Innate"],"Absorb Wind attacks."],["Abysmal Surge","Ailment",8,"SP","All foes",7,31,["Level up","Talk","Fusion"],"Inflict Despair (medium odds) to all foes."],["Abyssal Eye","Almighty",50,"SP","All foes",1,86,["Level up"],"Deal severe Almighty damage to all foes."],["Abyssal Wings","Curse",30,"SP","All foes",1,0,["Innate"],"Deal severe Curse damage to all foes."],["Active Support","Passive",0,"None","Passive",0,0,["Innate"],"Moral Support may now Charge or recover SP."],["Adverse Resolve","Passive",0,"None","Passive",4,7,["Level up","Talk"],"Increase critical rate when surrounded."],["Agi","Fire",4,"SP","1 foe",6,8,["Level up","Talk"],"Deal light Fire damage to 1 foe."],["Agidyne","Fire",12,"SP","1 foe",11,36,["Level up","Fusion"],"Deal heavy Fire damage to 1 foe."],["Agilao","Fire",8,"SP","1 foe",5,0,["Talk"],"Deal medium Fire damage to 1 foe."],["Agneyastra","Phys",24,"HP","All foes",2,87,["Level up","Fusion"],"Deal medium Phys damage to all foes 1 to 3 times."],["Ailment Boost","Passive",0,"None","Passive",5,44,["Level up"],"Increase chance of inflicting all ailments."],["Akashic Arts","Phys",20,"HP","All foes",1,0,["Innate"],"Deal severe Phys damage to all foes 1-2 times with high critical."],["Ali Dance","Passive",0,"None","Passive",4,78,["Level up","Card"],"Half hit rate of all incoming attacks."],["All-out Attack Boost","Passive",0,"None","Passive",0,0,["Innate"],"Increases damage from All-out Attacks"],["Almighty Amp","Passive",0,"None","Passive",0,0,["Card"],"Strengthen Almighty attacks by 50%."],["Almighty Boost","Passive",0,"None","Passive",2,85,["Level up","Card"],"Strengthen Almighty attacks by 25%."],["Ambient Aid","Passive",0,"None","Passive",6,20,["Level up"],"Greatly increase inflicting rate of all status effects under rainy day or special weather warning."],["Amrita Drop","Healing",6,"SP","1 ally",3,50,["Level up"],"Cure all ailments of 1 ally except for unique status."],["Amrita Shower","Healing",12,"SP","Party",9,18,["Level up"],"Cure all ailments of party except for unique status."],["Analysis","Passive",0,"None","Passive",0,0,["Innate"],"Confirm affinities you have previously attacked."],["Angelic Grace","Passive",0,"None","Passive",5,77,["Level up"],"Double evasion against Fire/Ice/Elec/Wind/Nuke/Psy/Bless/Curse attacks."],["Apt Pupil","Passive",0,"None","Passive",6,8,["Level up","Card"],"Increase critical rate."],["Arms Master","Passive",0,"None","Passive",3,56,["Level up","Card","Fusion"],"Half HP cost for physical skills."],["Assault Dive","Phys",13,"HP","1 foe",7,25,["Level up","Fusion"],"Deal heavy Phys damage to 1 foe."],["Atomic Flare","Nuke",48,"SP","1 foe",3,88,["Level up","Fusion"],"Deal severe Nuclear damage to 1 foe."],["Attack Master","Passive",0,"None","Passive",9,23,["Level up"],"Automatic Tarukaja at the start of battle."],["Attract","Support",4,"SP","Other",0,0,["Card"],"Raises chance of being targeted"],["Auto-Maraku","Passive",0,"None","Passive",5,50,["Level up","Fusion"],"Automatic Marakukaja at the start of battle. (Overwrites Defense Master)"],["Auto-Masuku","Passive",0,"None","Passive",3,74,["Level up","Fusion"],"Automatic Masukukaja at the start of battle. (Overwrites Speed Master)"],["Auto-Mataru","Passive",0,"None","Passive",6,51,["Level up"],"Automatic Matarukaja at the start of battle. (Overwrites Attack Master)"],["Ayamur","Phys",25,"HP","1 foe",1,84,["Level up"],"Deal medium Phys damage to 1 foe 3 times. High accuracy."],["Bad Beat","Phys",21,"HP","All foes",2,30,["Level up"],"Deal medium Phys damage and inflict Despair (low odds) to all foes."],["Baisudi","Healing",4,"SP","1 ally",5,10,["Level up"],"Cure Burn/Freeze/Shock of 1 ally."],["Beast Weaver","Phys",20,"HP","1 foe",1,0,["Innate"],"Deal colossal Phys damage to 1 foe and user is debuffed with Tarunda."],["Black Viper","Almighty",48,"SP","1 foe",2,94,["Level up"],"Deal severe Almighty damage to 1 foe."],["Blazing Hell","Fire",54,"SP","All foes",4,86,["Level up"],"Deal severe Fire damage to all foes."],["Bleeding Dry Brush","Support",22,"SP","1 ally",0,0,["Card"],"Drains next non-Almighty attack for 1 ally, Removes innate weaknesses"],["Bless Amp","Passive",0,"None","Passive",2,94,["Level up","Fusion"],"Strengthen (non instant death) Bless attacks by 50%."],["Bless Boost","Passive",0,"None","Passive",4,34,["Level up"],"Strengthen (non instant death) Bless attacks by 25%."],["Bloodbath","Phys",22,"HP","All foes",9,46,["Level up","Talk","Fusion"],"Deal heavy Phys damage and inflict Fear (low odds) to all foes."],["Brain Buster","Phys",22,"HP","All foes",3,30,["Level up","Talk"],"Deal heavy Phys damage and inflict Brainwash (low odds) to all foes."],["Brain Jack","Ailment",8,"SP","All foes",8,23,["Level up","Talk","Fusion"],"Inflict Brainwash (medium odds) to all foes."],["Brain Shake","Phys",9,"HP","1 foe",4,18,["Level up","Talk"],"Deal medium Phys damage and inflict Brainwash (medium odds) to 1 foe."],["Brainwash Boost","Passive",0,"None","Passive",3,31,["Level up"],"Increase chance of inflicting Brainwash."],["Brave Blade","Phys",24,"HP","1 foe",8,67,["Level up","Talk"],"Deal colossal Phys damage to 1 foe."],["Brave Step","Support",16,"SP","Party",0,0,["Innate"],"Raises critical rate for 3 turns for all allies"],["Bufu","Ice",4,"SP","1 foe",6,0,["Talk"],"Deal light Ice damage to 1 foe."],["Bufudyne","Ice",12,"SP","1 foe",8,41,["Level up","Talk","Fusion"],"Deal heavy Ice damage to 1 foe."],["Bufula","Ice",8,"SP","1 foe",4,0,["Talk"],"Deal medium Ice damage to 1 foe."],["Burn Boost","Passive",0,"None","Passive",7,15,["Level up"],"Increase chance of inflicting Burn."],["Cadenza","Healing",24,"SP","Party",1,0,["Innate"],"Restore 50% HP of party and increase evasion rate."],["Champion's Cup","Healing",10,"SP","Other",0,0,["Card"],"Diarama + Tarukaja"],["Charge","Support",15,"SP","Self",13,27,["Level up","Card","Talk"],"Multiply user's next Phys attack damage by 2.5."],["Checkmate","Support",90,"SP","Other",0,0,["Innate"],"Matarunda + Marakunda + Masukunda"],["Cleave","Phys",6,"HP","1 foe",3,2,["Level up","Talk"],"Deal light Phys damage to 1 foe."],["Climate Decorum","Passive",0,"None","Passive",4,15,["Level up"],"Greatly increase evasion under rainy day or special weather warning."],["Conceal","Support",4,"SP","Other",0,0,["Card"],"Lowers chance of being targeted"],["Concentrate","Support",15,"SP","Self",18,40,["Level up","Card","Talk","Fusion"],"Multiply user's next magical attack damage by 2.5."],["Confuse Boost","Passive",0,"None","Passive",2,17,["Level up"],"Increase chance of inflicting Confuse."],["Cornered Fang","Phys",10,"HP","1 foe",3,23,["Level up","Fusion"],"Deal medium Phys damage to 1 foe. More powerful when surrounded."],["Cosmic Flare","Nuke",54,"SP","All foes",3,92,["Level up"],"Deal severe Nuclear damage to all foes."],["Counter","Passive",0,"None","Passive",6,18,["Level up"],"10% chance of reflecting Phys attacks."],["Counterstrike","Passive",0,"None","Passive",7,28,["Level up","Talk","Fusion"],"15% chance of reflecting Phys attacks."],["Cross Slash","Phys",20,"HP","1 foe",1,0,["Innate"],"Deal heavy Phys damage to 1 foe 2 times. High accuracy."],["Curse Amp","Passive",0,"None","Passive",5,53,["Level up"],"Strengthen (non instant death) Curse attacks by 50%."],["Curse Boost","Passive",0,"None","Passive",3,26,["Level up"],"Strengthen (non instant death) Curse attacks by 25%."],["Dazzler","Ailment",3,"SP","1 foe",4,5,["Level up"],"Inflict Dizzy (high odds) to 1 foe."],["Deadly Fury","Phys",18,"HP","1 foe",3,55,["Level up","Talk","Fusion"],"Deal severe Phys damage to 1 foe. More powerful under Baton Pass."],["Death Scythe","Phys",20,"HP","1 foe",2,0,["Fusion"],"Deal severe Phys damage and inflict Fear (medium odds) to 1 foe."],["Deathbound","Phys",22,"HP","All foes",8,46,["Level up","Talk","Fusion"],"Deal medium Phys damage to all foes 1 to 2 times."],["Debilitate","Support",30,"SP","1 foe",7,65,["Level up","Card","Talk","Fusion"],"Decrease 1 foe's Attack, Defense and Agility for 3 turns."],["Defense Master","Passive",0,"None","Passive",6,12,["Level up"],"Automatic Rakukaja at the start of battle."],["Dekaja","Support",10,"SP","All foes",9,10,["Level up","Card","Fusion"],"Negate all -kaja buff effects of all foes."],["Dekunda","Support",10,"SP","Other",7,12,["Level up","Card"],"Negate all -nda debuff effects of party."],["Demonic Decree","Curse",38,"SP","1 foe",3,88,["Level up","Fusion"],"Half remaining HP of 1 foe."],["Despair Boost","Passive",0,"None","Passive",3,31,["Level up"],"Increase chance of inflicting Despair."],["Dia","Healing",3,"SP","1 ally",5,7,["Level up","Talk"],"Slightly restore 1 ally's HP."],["Diamond Dust","Ice",48,"SP","1 foe",5,69,["Level up","Fusion"],"Deal severe Ice damage to 1 foe."],["Diarahan","Healing",18,"SP","1 ally",9,21,["Level up","Talk","Fusion"],"Fully restore 1 ally's HP."],["Diarama","Healing",6,"SP","1 ally",8,19,["Level up","Card","Talk","Fusion"],"Moderately restore 1 ally's HP."],["Die For Me!","Curse",40,"SP","All foes",1,85,["Level up"],"High chance of instantly killing all foes."],["Divine Grace","Passive",0,"None","Passive",4,17,["Level up"],"Effects of healing magic are increased by 50%."],["Divine Judgement","Bless",38,"SP","1 foe",5,78,["Level up","Fusion"],"Half remaining HP of 1 foe."],["Dizzy Boost","Passive",0,"None","Passive",3,45,["Level up"],"Increase chance of inflicting Dizzy."],["Dodge Bless","Passive",0,"None","Passive",2,35,["Level up"],"Double evasion rate against (non instant death) Bless attacks."],["Dodge Curse","Passive",0,"None","Passive",5,9,["Level up"],"Double evasion rate against (non instant death) Curse attacks."],["Dodge Elec","Passive",0,"None","Passive",7,8,["Level up"],"Double evasion rate against Electric attacks."],["Dodge Fire","Passive",0,"None","Passive",4,11,["Level up"],"Double evasion rate against Fire attacks."],["Dodge Ice","Passive",0,"None","Passive",2,11,["Level up","Card"],"Double evasion rate against Ice attacks."],["Dodge Nuke","Passive",0,"None","Passive",1,0,["Innate"],"Double evasion rate against Nuclear attacks."],["Dodge Phys","Passive",0,"None","Passive",3,20,["Level up"],"Doubles evasion rate against Phys attacks"],["Dodge Psy","Passive",0,"None","Passive",2,27,["Level up"],"Double evasion rate against Psy attacks."],["Dodge Wind","Passive",0,"None","Passive",1,0,["Innate"],"Double evasion rate against Wind attacks."],["Door of Hades","Almighty",32,"SP","All foes",1,0,["Innate"],"Deal heavy Almighty damage to all foes with medium chance of instant kill."],["Dormin Rush","Phys",16,"HP","All foes",3,0,["Fusion"],"Deal medium Phys damage and inflict Sleep (low odds) to all foes."],["Dormina","Ailment",3,"SP","1 foe",6,7,["Level up","Talk"],"Inflict Sleep (high odds) to 1 foe."],["Double Fangs","Phys",10,"HP","1 foe",4,18,["Level up","Talk"],"Deal medium Phys damage to 1 foe 2 times."],["Double Shot","Gun",12,"HP","1 foe",3,20,["Level up","Talk"],"Deal light Gun damage to 1 foe 2 times."],["Dream Needle","Gun",8,"HP","1 foe",5,5,["Level up"],"Deal light Gun damage and inflict Sleep (medium odds) to 1 foe."],["EXP Boost","Passive",0,"None","Passive",0,0,["Innate"],"EXP +15% after battle"],["Eiga","Curse",8,"SP","1 foe",3,23,["Level up","Talk","Fusion"],"Deal medium Curse damage to 1 foe."],["Eigaon","Curse",12,"SP","1 foe",7,45,["Level up","Talk","Fusion"],"Deal heavy Curse damage to 1 foe."],["Eiha","Curse",4,"SP","1 foe",2,0,["Innate"],"Deal light Curse damage to 1 foe."],["Elec Amp","Passive",0,"None","Passive",4,66,["Level up","Fusion"],"Strengthen Electric attacks by 50%."],["Elec Boost","Passive",0,"None","Passive",4,29,["Level up"],"Strengthen Electric attacks by 25%."],["Elec Break","Support",6,"SP","All foes",4,46,["Level up"],"Negate Electric resistances of all foes."],["Elec Wall","Support",18,"SP","1 ally",4,14,["Level up","Talk"],"Create a shield on 1 ally to reduce damage of Electric attacks for 3 turns."],["Emergency Shift","Passive",0,"None","Passive",0,0,["Innate"],"Chance to swap current party with backups when 2 or more people are KO'd."],["Endure","Passive",0,"None","Passive",5,27,["Level up","Card"],"Survive one fatal blow with 1 HP remaining."],["Enduring Soul","Passive",0,"None","Passive",9,54,["Level up","Card","Fusion"],"Survive one fatal blow with HP completely recovered."],["Energy Drop","Healing",4,"SP","1 ally",5,0,["Innate"],"Cure Confuse/Fear/Despair/Rage/Brainwash of 1 ally."],["Energy Shower","Healing",8,"SP","Other",3,31,["Level up","Talk","Fusion"],"Cure Confuse/Fear/Despair/Rage/Brainwash of party."],["Evade Bless","Passive",0,"None","Passive",1,58,["Level up"],"Triple evasion rate against (non instant death) Bless attacks."],["Evade Curse","Passive",0,"None","Passive",2,74,["Level up"],"Triple evasion rate against (non instant death) Curse attacks."],["Evade Elec","Passive",0,"None","Passive",2,51,["Level up"],"Triple evasion rate against Electric attacks."],["Evade Fire","Passive",0,"None","Passive",2,49,["Level up"],"Triple evasion rate against Fire attacks."],["Evade Ice","Passive",0,"None","Passive",1,86,["Level up"],"Triple evasion rate against Ice attacks."],["Evade Nuke","Passive",0,"None","Passive",2,57,["Level up"],"Triple evasion rate against Nuclear attacks."],["Evade Phys","Passive",0,"None","Passive",3,34,["Level up"],"Triples evasion rate against Phys attacks"],["Evade Psy","Passive",0,"None","Passive",1,68,["Level up"],"Triple evasion rate against Psy attacks."],["Evade Wind","Passive",0,"None","Passive",1,60,["Level up"],"Triple evasion rate against Wind attacks."],["Evil Smile","Ailment",8,"SP","All foes",7,48,["Level up","Fusion"],"Inflict Fear (medium odds) to all foes."],["Evil Touch","Ailment",3,"SP","1 foe",7,13,["Level up","Talk"],"Inflict Fear (high odds) to 1 foe."],["Famine's Scream","Ailment",0,"None","All foes",0,0,["Innate"],"Inflict Hunger (medium odds) to all foes."],["Fast Heal","Passive",0,"None","Passive",4,55,["Level up"],"Half the time needed to recover from ailments."],["Fear Boost","Passive",0,"None","Passive",6,15,["Level up"],"Increase chance of inflicting Fear."],["Fighting Spirit","Support",80,"SP","Party",0,0,["Innate"],"Next Phys attack +150% damage for all allies"],["Final Guard","Passive",0,"None","Passive",0,0,["Innate"],"Chance to nullify a fatal attack to a current party member."],["Fire Amp","Passive",0,"None","Passive",6,59,["Level up","Talk"],"Strengthen Fire attacks by 50%."],["Fire Boost","Passive",0,"None","Passive",3,32,["Level up","Talk"],"Strengthen Fire attacks by 25%."],["Fire Break","Support",6,"SP","All foes",3,20,["Level up","Talk"],"Negate Fire resistances of all foes."],["Fire Wall","Support",18,"SP","1 ally",3,13,["Level up","Talk"],"Create a shield on 1 ally to reduce damage of Fire attacks for 3 turns."],["Firm Stance","Passive",0,"None","Passive",2,91,["Level up","Fusion"],"Half all incoming damage by sacrificing evasion completely."],["Flash Bomb","Phys",19,"HP","All foes",5,24,["Level up","Fusion"],"Deal medium Phys damage and inflict Dizzy (low odds) to all foes."],["Forget Boost","Passive",0,"None","Passive",3,16,["Level up"],"Increase chance of inflicting Forget."],["Fortified Moxy","Passive",0,"None","Passive",5,32,["Level up"],"Increase critical rate when beginning battle with preemptive turn."],["Fortify Spirit","Passive",0,"None","Passive",7,56,["Level up"],"Reduce susceptibilities to all ailments."],["Foul Breath","Almighty",8,"SP","1 foe",7,28,["Level up","Talk"],"Increase susceptibility to all ailments of 1 foe."],["Freeze Boost","Passive",0,"None","Passive",9,15,["Level up","Talk"],"Increase chance of inflicting Freeze."],["Frei","Nuke",4,"SP","1 foe",3,0,["Card","Talk"],"Deal light Nuclear damage to 1 foe."],["Freidyne","Nuke",12,"SP","1 foe",6,45,["Level up","Talk","Fusion"],"Deal heavy Nuclear damage to 1 foe."],["Freila","Nuke",8,"SP","1 foe",4,0,["Innate"],"Deal medium Nuclear damage to 1 foe."],["Gambler's Foresight","Support",20,"SP","Other",0,0,["Card"],"Masukukaja, Begins battle with Concentrate"],["Garu","Wind",3,"SP","1 foe",5,6,["Level up","Talk"],"Deal light Wind damage to 1 foe."],["Garudyne","Wind",10,"SP","1 foe",6,47,["Level up","Talk"],"Deal heavy Wind damage to 1 foe."],["Garula","Wind",6,"SP","1 foe",4,0,["Talk","Fusion"],"Deal medium Wind damage to 1 foe."],["Gatling Blows","Phys",16,"HP","1 foe",1,49,["Level up"],"Deal light Phys damage to 1 foe 3 to 4 times."],["Ghastly Wail","Almighty",28,"SP","All foes",6,32,["Level up","Talk"],"Instantly kill all foes under Fear."],["Giant Slice","Phys",9,"HP","1 foe",6,22,["Level up"],"Deal medium Phys damage to 1 foe."],["Gigantomachia","Phys",25,"HP","All foes",6,62,["Level up","Talk"],"Deal colossal Phys damage to all foes."],["God's Hand","Phys",25,"HP","1 foe",5,65,["Level up","Fusion"],"Deal colossal Phys damage to 1 foe."],["Great Aim","Passive",0,"None","Passive",0,0,["Innate"],"Gun hit rate +5%"],["Growth 1","Passive",0,"None","Passive",2,7,["Level up"],"Persona gains 1/4 EXP while inactive."],["Growth 2","Passive",0,"None","Passive",4,36,["Level up","Card"],"Persona gains 1/2 EXP while inactive."],["Growth 3","Passive",0,"None","Passive",4,25,["Level up","Fusion"],"Persona gains full EXP even while inactive."],["Guiding Tendril","Support",20,"SP","All foes",0,0,["Card"],"Downs all foes, Only usable when ambushing foe, Life Aid"],["Gun Amp","Passive",0,"None","Passive",3,53,["Level up","Fusion"],"Gun damage +50%"],["Gun Boost","Passive",0,"None","Passive",1,40,["Level up"],"Gun damage +25%"],["Hama","Bless",6,"SP","1 foe",1,0,["Innate"],"Small chance of instantly killing 1 foe."],["Hama Boost","Passive",0,"None","Passive",6,30,["Level up"],"Increase success rate of instant death by Bless skills."],["Hamaon","Bless",12,"SP","1 foe",8,29,["Level up","Talk","Fusion"],"Medium chance of instantly killing 1 foe."],["Hassou Tobi","Phys",25,"HP","All foes",1,94,["Level up"],"Deal light Phys damage to all foes 8 times."],["Headbutt","Phys",9,"HP","1 foe",2,14,["Level up"],"Deal medium Phys damage and inflict Forget (medium odds) to 1 foe."],["Heat Riser","Support",30,"SP","1 ally",8,50,["Level up","Card","Talk"],"Increase 1 ally's Attack, Defense and Agility for 3 turns."],["Heat Up","Passive",0,"None","Passive",4,24,["Level up","Card"],"Recover 5% HP and 10 SP at the start of preemptive turn."],["Heat Wave","Phys",20,"HP","All foes",6,47,["Level up"],"Deal heavy Phys damage to all foes."],["High Counter","Passive",0,"None","Passive",9,52,["Level up","Card","Fusion"],"20% chance of reflecting Phys attacks."],["High Energy","Support",80,"SP","Party",0,0,["Innate"],"Next Magic attack +150% damage for all allies"],["Holy Benevolence","Healing",26,"SP","Party",1,0,["Innate"],"Revive all allies with 100% HP"],["Holy Embrace","Passive",0,"None","Passive",1,96,["Level up"],"Recover 25% max HP each turn in battle"],["Holy Whisper","Passive",0,"None","Passive",1,98,["Level up"],"Recover 15% max HP and 15 SP each turn in battle"],["Hyakka Ryouran","Support",90,"SP","Other",0,0,["Innate"],"Matarukaja + Marakukaja + Masukukaja"],["Hysterical Slap","Phys",9,"HP","1 foe",3,18,["Level up","Talk"],"Deal medium Phys damage and inflict Rage (medium odds) to 1 foe."],["Ice Age","Ice",54,"SP","All foes",3,86,["Level up"],"Deal severe Ice damage to all foes."],["Ice Amp","Passive",0,"None","Passive",7,67,["Level up","Talk","Fusion"],"Strengthen Ice attacks by 50%."],["Ice Boost","Passive",0,"None","Passive",2,41,["Level up"],"Strengthen Ice attacks by 25%."],["Ice Break","Support",6,"SP","All foes",4,48,["Level up"],"Negate Ice resistances of all foes."],["Ice Wall","Support",18,"SP","1 ally",5,7,["Level up"],"Create a shield on 1 ally to reduce damage of Ice attacks for 3 turns."],["Inferno","Fire",48,"SP","1 foe",3,78,["Level up","Fusion"],"Deal severe Fire damage to 1 foe."],["Insta-Heal","Passive",0,"None","Passive",2,87,["Level up"],"Recover from an ailment in 1 turn."],["Invigorate 1","Passive",0,"None","Passive",2,31,["Level up","Card"],"Recover 3 SP each turn in battle."],["Invigorate 2","Passive",0,"None","Passive",2,0,["Innate"],"Recover 5 SP each turn in battle."],["Invigorate 3","Passive",0,"None","Passive",6,76,["Level up"],"Recover 7 SP each turn in battle."],["Kill Rush","Phys",14,"HP","1 foe",2,24,["Level up","Fusion"],"Deal light Phys damage to 1 foe 1-3 times."],["Kouga","Bless",8,"SP","1 foe",2,0,["Talk"],"Deal medium Bless damage to 1 foe."],["Kougaon","Bless",12,"SP","1 foe",5,43,["Level up","Fusion"],"Deal heavy Bless damage to 1 foe."],["Kouha","Bless",4,"SP","1 foe",1,0,["Talk"],"Deal light Bless damage to 1 foe."],["Kuzunoha's Order","Passive",0,"None","Passive",0,0,["Innate"],"Reduces skill costs by 25%"],["Laevateinn","Phys",25,"HP","1 foe",0,0,["Innate"],"Colossal damage to 1 foe"],["Last Stand","Passive",0,"None","Passive",4,46,["Level up"],"Reduces enemy hit rate by 2/3 when surrounded"],["Life Aid","Passive",0,"None","Passive",4,63,["Level up","Card"],"Recover 8% HP and SP after a successful battle."],["Life Boost","Passive",0,"None","Passive",0,0,["Innate"],"All Stats +3, SP +20"],["Life Drain","Almighty",3,"SP","1 foe",5,0,["Talk"],"Drains HP from 1 foe."],["Life Leech","Almighty",0,"None","1 foe",0,0,["Innate"],"Drains 150 HP from 1 foe."],["Life Wall","Support",95,"SP","Party",0,0,["Innate"],"Repels next non-Almighty attack for all allies"],["Lucky Punch","Phys",3,"HP","1 foe",3,9,["Level up"],"Deal minuscule Phys damage to 1 foe. High critical rate."],["Lullaby","Ailment",8,"SP","All foes",4,0,["Talk","Fusion"],"Inflict Sleep (medium odds) to all foes."],["Lunge","Phys",5,"HP","1 foe",5,4,["Level up","Talk"],"Deal light Phys damage to 1 foe."],["Mabaisudi","Healing",8,"SP","Other",4,35,["Level up"],"Cure Burn/Freeze/Shock of party."],["Mabufu","Ice",10,"SP","All foes",5,10,["Level up","Card","Talk","Fusion"],"Deal light Ice damage to all foes."],["Mabufudyne","Ice",22,"SP","All foes",14,56,["Level up","Talk","Fusion"],"Deal heavy Ice damage to all foes."],["Mabufula","Ice",16,"SP","All foes",6,28,["Level up","Fusion"],"Deal medium Ice damage to all foes."],["Maeiga","Curse",16,"SP","All foes",4,36,["Level up"],"Deal medium Curse damage to all foes."],["Maeigaon","Curse",22,"SP","All foes",11,57,["Level up"],"Deal heavy Curse damage to all foes."],["Maeiha","Curse",10,"SP","All foes",3,29,["Level up"],"Deal light Curse damage to all foes."],["Mafrei","Nuke",10,"SP","All foes",3,17,["Level up","Talk","Fusion"],"Deal light Nuclear damage to all foes."],["Mafreidyne","Nuke",22,"SP","All foes",5,62,["Level up","Fusion"],"Deal heavy Nuclear damage to all foes."],["Mafreila","Nuke",16,"SP","All foes",4,26,["Level up","Talk"],"Deal medium Nuclear damage to all foes."],["Magaru","Wind",8,"SP","All foes",4,22,["Level up","Talk","Fusion"],"Deal small Wind damage to all foes."],["Magarudyne","Wind",20,"SP","All foes",5,55,["Level up","Talk","Fusion"],"Deal heavy Wind damage to all foes."],["Magarula","Wind",14,"SP","All foes",8,26,["Level up","Fusion"],"Deal medium Wind damage to all foes."],["Magatsu Mandala","Curse",30,"SP","All foes",1,0,["Innate"],"Deal heavy Curse damage to all foes and inflict Confuse/Fear/Despair (medium odds)."],["Magic Ability","Passive",0,"None","Passive",0,0,["Card"],"Strengthen all magical attacks by 25%."],["Mahama","Bless",14,"SP","All foes",4,0,["Talk","Fusion"],"Small chance of instantly killing all foes."],["Mahamaon","Bless",26,"SP","All foes",8,62,["Level up","Talk","Fusion"],"Medium chance of instantly killing all foes."],["Makajam","Ailment",3,"SP","1 foe",6,18,["Level up","Talk"],"Inflict Forget (high odds) to 1 foe."],["Makajamaon","Ailment",8,"SP","All foes",8,21,["Level up","Talk","Fusion"],"Inflict Forget (medium odds) to all foes."],["Makara Break","Support",9,"SP","All foes",2,46,["Level up"],"Remove magic-repellent shields from all foes."],["Makarakarn","Support",24,"SP","1 ally",7,32,["Level up","Card","Fusion"],"Create a shield on 1 ally to repel 1 magical attack."],["Makouga","Bless",16,"SP","All foes",7,34,["Level up","Talk","Fusion"],"Deal medium Bless damage to all foes."],["Makougaon","Bless",22,"SP","All foes",7,70,["Level up","Talk"],"Deal heavy Bless damage to all foes."],["Makouha","Bless",10,"SP","All foes",2,0,["Fusion"],"Deal light Bless damage to all foes."],["Mamudo","Curse",14,"SP","All foes",4,21,["Level up","Fusion"],"Small chance of instantly killing all foes."],["Mamudoon","Curse",26,"SP","All foes",9,41,["Level up","Talk","Fusion"],"Medium chance of instantly killing all foes."],["Mapsi","Psy",10,"SP","All foes",5,18,["Level up"],"Deal light Psy damage to all foes."],["Mapsio","Psy",16,"SP","All foes",3,0,["Innate"],"Deal medium Psy damage to all foes."],["Mapsiodyne","Psy",22,"SP","All foes",6,59,["Level up","Talk","Fusion"],"Deal heavy Psy damage to all foes."],["Maragi","Fire",10,"SP","All foes",5,13,["Level up","Card","Fusion"],"Deal light Fire damage to all foes."],["Maragidyne","Fire",22,"SP","All foes",9,58,["Level up","Talk","Fusion"],"Deal heavy Fire damage to all foes."],["Maragion","Fire",16,"SP","All foes",4,12,["Level up","Fusion"],"Deal medium Fire damage to all foes."],["Marakukaja","Support",24,"SP","Party",12,14,["Level up","Card","Talk","Fusion"],"Increase party's Defense for 3 turns."],["Marakunda","Support",24,"SP","All foes",6,19,["Level up","Card","Fusion"],"Decrease all foes' Defense for 3 turns."],["Marin Karin","Ailment",3,"SP","1 foe",4,12,["Level up"],"Inflict Brainwash (high odds) to 1 foe."],["Masquerade","Phys",25,"HP","1 foe",0,0,["Innate"],"Severe damage to 1 foe, x2 hits"],["Masukukaja","Support",24,"SP","Party",10,42,["Level up","Card"],"Increase party's Agility for 3 turns."],["Masukunda","Support",24,"SP","All foes",6,34,["Level up","Card","Talk","Fusion"],"Decrease all foes' Agility for 3 turns."],["Matarukaja","Support",24,"SP","Party",15,26,["Level up","Card","Talk","Fusion"],"Increase party's Attack power for 3 turns."],["Matarunda","Support",24,"SP","All foes",5,21,["Level up","Card","Talk","Fusion"],"Decrease all foes' Attack power for 3 turns."],["Mazio","Elec",10,"SP","All foes",2,0,["Fusion"],"Deal light Electric damage to all foes."],["Maziodyne","Elec",22,"SP","All foes",10,39,["Level up","Talk","Fusion"],"Deal heavy Electric damage to all foes."],["Mazionga","Elec",16,"SP","All foes",9,24,["Level up","Card","Talk","Fusion"],"Deal medium Electric damage to all foes."],["Me Patra","Healing",8,"SP","Other",3,25,["Level up"],"Cure Dizzy/Forget/Sleep/Hunger of party."],["Media","Healing",7,"SP","Party",6,9,["Level up"],"Slightly restore party's HP."],["Mediarahan","Healing",30,"SP","Party",7,59,["Level up","Fusion"],"Fully restore party's HP."],["Mediarama","Healing",12,"SP","Party",8,30,["Level up","Talk"],"Moderately restore party's HP."],["Megaton Raid","Phys",16,"HP","1 foe",6,52,["Level up","Talk"],"Deal severe Phys damage to 1 foe."],["Megido","Almighty",15,"SP","All foes",1,37,["Level up","Talk"],"Deal medium Almighty damage to all foes."],["Megidola","Almighty",24,"SP","All foes",7,38,["Level up"],"Deal heavy Almighty damage to all foes."],["Megidolaon","Almighty",38,"SP","All foes",12,76,["Level up","Talk","Fusion"],"Deal severe Almighty damage to all foes."],["Mementos Scan","Passive",0,"None","Passive",0,0,["Innate"],"Chance to fully map a floor of Mementos when entering that floor."],["Memory Blow","Phys",15,"HP","All foes",4,20,["Level up","Fusion"],"Deal light Phys damage and inflict Forget (low odds) to all foes."],["Mind Slice","Phys",19,"HP","All foes",2,27,["Level up","Fusion"],"Deal medium Phys damage and inflict Confuse (low odds) to all foes."],["Miracle Punch","Phys",8,"HP","1 foe",5,0,["Talk","Fusion"],"Deal medium Phys damage to 1 foe. High critical rate."],["Miracle Rush","Phys",16,"HP","All foes",0,0,["Innate"],"Deal medium Phys damage to all foes. High critical rate."],["Money Boost","Passive",0,"None","Passive",0,0,["Innate"],"Doubles money earned after battle"],["Moral Support","Passive",0,"None","Passive",0,0,["Innate"],"Chance to cast Kaja or party-healing magic during battle."],["Morning Star","Almighty",54,"SP","All foes",1,94,["Level up"],"Deal severe Almighty damage to all foes."],["Mudo","Curse",6,"SP","1 foe",3,12,["Level up","Talk"],"Small chance of instantly killing 1 foe."],["Mudo Boost","Passive",0,"None","Passive",2,0,["Innate"],"Increase success rate of instant death by Curse skills."],["Mudoon","Curse",12,"SP","1 foe",7,33,["Level up","Talk"],"Medium chance of instantly killing 1 foe."],["Myriad Slashes","Phys",20,"HP","1 foe",11,69,["Level up","Fusion"],"Deal medium Phys damage to 1 foe 2 to 3 times."],["Myriad Truths","Almighty",40,"SP","All foes",1,0,["Innate"],"Deal 3 times heavy Almighty damage to all foes."],["Negative Pile","Phys",12,"HP","1 foe",1,42,["Level up","Talk"],"Deal heavy Phys damage and inflict Despair (medium odds) to 1 foe."],["Neo Cadenza","Healing",24,"SP","Party",1,0,["Innate"],"Restore 50% HP of party and increase attack, defense, and evasion rate."],["Nocturnal Flash","Ailment",8,"SP","All foes",6,15,["Level up","Talk","Fusion"],"Inflict Dizzy (medium odds) to all foes."],["Nuke Amp","Passive",0,"None","Passive",4,60,["Level up","Fusion"],"Strengthen Nuclear attacks by 50%."],["Nuke Boost","Passive",0,"None","Passive",2,25,["Level up"],"Strengthen Nuclear attacks by 25%."],["Nuke Break","Support",6,"SP","All foes",1,42,["Level up"],"Negate Nuclear resistances of all foes."],["Nuke Wall","Support",18,"SP","1 ally",0,0,["Innate"],"Create a shield on 1 ally to reduce damage of Nuclear attacks for 3 turns."],["Null Bless","Passive",0,"None","Passive",1,80,["Level up"],"Impart immunity against Bless attacks."],["Null Brainwash","Passive",0,"None","Passive",1,0,["Innate"],"Impart immunity against Brainwash."],["Null Burn","Passive",0,"None","Passive",0,0,["Innate"],"Immune to Burn"],["Null Confuse","Passive",0,"None","Passive",1,45,["Level up"],"Impart immunity against Confuse."],["Null Curse","Passive",0,"None","Passive",2,46,["Level up"],"Impart immunity against Curse attacks."],["Null Despair","Passive",0,"None","Passive",0,0,["Innate"],"Impart immunity against Despair."],["Null Dizzy","Passive",0,"None","Passive",2,42,["Level up"],"Impart immunity against Dizzy."],["Null Elec","Passive",0,"None","Passive",1,55,["Level up"],"Impart immunity against Electric attacks."],["Null Fear","Passive",0,"None","Passive",0,0,["Innate"],"Impart immunity against Fear."],["Null Fire","Passive",0,"None","Passive",1,37,["Level up"],"Impart immunity against Fire attacks."],["Null Forget","Passive",0,"None","Passive",1,29,["Level up"],"Impart immunity against Forget."],["Null Freeze","Passive",0,"None","Passive",0,0,["Innate"],"Immune to Freeze"],["Null Hunger","Passive",0,"None","Passive",0,0,["Innate"],"Immune to Hunger"],["Null Ice","Passive",0,"None","Passive",3,26,["Level up"],"Impart immunity against Ice attacks."],["Null Mortal","Passive",0,"None","Passive",0,0,["Innate"],"Nullifies damage from Bless and Curse attacks"],["Null Nuke","Passive",0,"None","Passive",0,0,["Innate"],"Impart immunity against Nuclear attacks."],["Null Phys","Passive",0,"None","Passive",0,0,["Innate"],"Impart immunity against Phys attacks."],["Null Psy","Passive",0,"None","Passive",0,0,["Innate"],"Impart immunity against Psy attacks."],["Null Rage","Passive",0,"None","Passive",3,38,["Level up"],"Impart immunity against Rage."],["Null Shock","Passive",0,"None","Passive",0,0,["Innate"],"Immune to Shock"],["Null Sleep","Passive",0,"None","Passive",1,26,["Level up"],"Impart immunity against Sleep."],["Null Wind","Passive",0,"None","Passive",1,64,["Level up"],"Impart immunity against Wind attacks."],["Ominous Words","Ailment",3,"SP","1 foe",3,27,["Level up","Talk"],"Inflict Despair (high odds) to 1 foe."],["One-shot Kill","Gun",17,"HP","1 foe",7,54,["Level up","Talk","Fusion"],"Deal severe Gun damage to 1 foe. High critical rate."],["Oni Kagura","Phys",16,"HP","All foes",5,22,["Level up","Talk","Fusion"],"Deal medium Phys damage and inflict Rage (low odds) to all foes."],["Oratorio","Healing",38,"SP","Party",1,0,["Innate"],"Fully restore party's HP and negate all -nda debuffs."],["Panta Rhei","Wind",42,"SP","1 foe",2,0,["Fusion"],"Deal severe Wind damage to 1 foe"],["Patra","Healing",4,"SP","1 ally",3,3,["Level up","Talk"],"Cure Dizzy/Forget/Sleep/Hunger of 1 ally."],["Phantom Show","Ailment",4,"SP","All foes",1,0,["Innate"],"Inflict Sleep (high odds) to all foes."],["Position Hack","Passive",0,"None","Passive",0,0,["Innate"],"Chance to instantly Hold Up enemies when starting a battle."],["Power Slash","Phys",10,"HP","1 foe",3,13,["Level up","Talk","Fusion"],"Deal medium Phys damage to 1 foe."],["President's Insight","Support",15,"SP","1 ally",0,0,["Card"],"Next Magic attack +150% damage for 1 ally, Attack Master"],["Psi","Psy",4,"SP","1 foe",2,12,["Level up","Card","Talk"],"Deal light Psy damage to 1 foe."],["Psio","Psy",8,"SP","1 foe",6,23,["Level up","Talk","Fusion"],"Deal medium Psy damage to 1 foe."],["Psiodyne","Psy",12,"SP","1 foe",6,40,["Level up","Talk"],"Deal heavy Psy damage to 1 foe."],["Psy Amp","Passive",0,"None","Passive",2,77,["Level up"],"Strengthen Psy attacks by 50%."],["Psy Boost","Passive",0,"None","Passive",1,55,["Level up"],"Strengthen Psy attacks by 25%."],["Psy Break","Support",6,"SP","All foes",3,56,["Level up"],"Negate Psy resistances of all foes."],["Psy Wall","Support",18,"SP","1 ally",3,39,["Level up","Talk"],"Create a shield on 1 ally to reduce damage of Psy attacks for 3 turns."],["Psycho Blast","Psy",54,"SP","All foes",2,88,["Level up"],"Deal severe Psy damage to all foes."],["Psycho Force","Psy",48,"SP","1 foe",5,78,["Level up","Fusion"],"Deal severe Psy damage to 1 foe."],["Pulinpa","Ailment",3,"SP","1 foe",6,15,["Level up","Talk"],"Inflict Confuse (high odds) to 1 foe."],["Rage Boost","Passive",0,"None","Passive",2,14,["Level up"],"Increase chance of inflicting Rage."],["Rakukaja","Support",8,"SP","1 ally",6,6,["Level up","Card","Talk"],"Increase 1 ally's Defense for 3 turns."],["Rakunda","Support",8,"SP","1 foe",8,13,["Level up","Talk"],"Decrease 1 foe's Defense for 3 turns."],["Rampage","Phys",13,"HP","All foes",5,15,["Level up","Talk"],"Deal light Phys damage to all foes 1 to 3 times."],["Rebellion","Support",5,"SP","1 ally",13,16,["Level up"],"Increase 1 ally's critical rate for 3 turns."],["Rebellion Blade","Almighty",99,"SP","1 foe",0,0,["Innate"],"Colossal damage to 1 foe, Damage +150% when target downed"],["Recarm","Healing",8,"SP","1 ally",2,23,["Level up"],"Revive 1 ally with 50% HP recovered."],["Regenerate 1","Passive",0,"None","Passive",3,13,["Level up"],"Restore 2% of max HP each turn in battle."],["Regenerate 2","Passive",0,"None","Passive",3,0,["Fusion"],"Recover 4% of max HP each turn in battle."],["Regenerate 3","Passive",0,"None","Passive",7,69,["Level up","Card","Fusion"],"Recover 6% of max HP each turn in battle."],["Repel Bless","Passive",0,"None","Passive",2,88,["Level up","Fusion"],"Repel Bless attacks."],["Repel Curse","Passive",0,"None","Passive",1,78,["Level up"],"Repel Curse attacks."],["Repel Elec","Passive",0,"None","Passive",1,77,["Level up","Fusion"],"Repel Electric attacks."],["Repel Fire","Passive",0,"None","Passive",2,71,["Level up"],"Repel Fire attacks."],["Repel Ice","Passive",0,"None","Passive",1,91,["Level up","Fusion"],"Repel Ice attacks."],["Repel Nuke","Passive",0,"None","Passive",2,63,["Level up","Fusion"],"Repel Nuclear attacks."],["Repel Phys","Passive",0,"None","Passive",3,22,["Level up"],"Repel Phys attacks."],["Repel Psy","Passive",0,"None","Passive",1,67,["Level up","Fusion"],"Repel Psy attacks."],["Repel Wind","Passive",0,"None","Passive",1,89,["Level up","Fusion"],"Repel Wind attacks."],["Resist Bless","Passive",0,"None","Passive",1,38,["Level up"],"Reduce damage from Bless attacks."],["Resist Brainwash","Passive",0,"None","Passive",1,8,["Level up"],"Reduce susceptibility to Brainwash."],["Resist Burn","Passive",0,"None","Passive",0,0,["Innate"],"Halves susceptibility to Burn"],["Resist Confuse","Passive",0,"None","Passive",1,6,["Level up"],"Reduce susceptibility to Confuse."],["Resist Curse","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Curse attacks."],["Resist Despair","Passive",0,"None","Passive",2,19,["Level up"],"Reduce susceptibility to Despair."],["Resist Dizzy","Passive",0,"None","Passive",2,10,["Level up"],"Reduce susceptibility to Dizzy."],["Resist Elec","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Electric attacks."],["Resist Fear","Passive",0,"None","Passive",3,10,["Level up"],"Reduce susceptibility to Fear."],["Resist Fire","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Fire attacks."],["Resist Forget","Passive",0,"None","Passive",2,11,["Level up"],"Reduce susceptibility to Forget."],["Resist Freeze","Passive",0,"None","Passive",0,0,["Innate"],"Halves susceptibility to Freeze"],["Resist Hunger","Passive",0,"None","Passive",0,0,["Innate"],"Halves susceptibility to Hunger"],["Resist Ice","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Ice attacks."],["Resist Nuke","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Nuclear attacks."],["Resist Phys","Passive",0,"None","Passive",0,0,["Innate"],"Reduce damage from Phys attacks."],["Resist Psy","Passive",0,"None","Passive",1,56,["Level up"],"Reduce damage from Psy attacks."],["Resist Rage","Passive",0,"None","Passive",0,0,["Innate"],"Reduce susceptibility to Rage."],["Resist Shock","Passive",0,"None","Passive",0,0,["Innate"],"Halves susceptibility to Shock"],["Resist Sleep","Passive",0,"None","Passive",2,6,["Level up"],"Reduce susceptibility to Sleep."],["Resist Wind","Passive",0,"None","Passive",1,27,["Level up"],"Reduce damage from Wind attacks."],["Reverse Rub","Ailment",0,"None","1 ally",0,0,["Innate"],"Inflict Rage (100%) to 1 ally."],["Revolution","Support",5,"SP","All foes",6,45,["Level up","Talk","Fusion"],"Increase all foes and allies' critical rate for 3 turns."],["Riot Gun","Gun",24,"HP","All foes",3,85,["Level up","Fusion"],"Deal severe Gun damage to all foes."],["Rising Slash","Phys",14,"HP","1 foe",7,21,["Level up","Fusion"],"Deal heavy Phys damage to 1 foe. More powerful under Baton Pass."],["Salvation","Healing",48,"SP","Party",8,83,["Level up","Fusion"],"Fully restore HP and cure all ailments of party except for unique status."],["Samarecarm","Healing",18,"SP","1 ally",10,41,["Level up","Card","Fusion"],"Revive 1 ally with all HP recovered."],["Samsara","Bless",40,"SP","All foes",1,41,["Level up"],"High chance of instantly killing all foes."],["Samurai's Ruling","Passive",0,"None","Passive",0,0,["Innate"],"Raises critical rate and Magic evasion"],["Self-Destruct","Almighty",0,"None","Self",0,0,["Innate"],"Sacrifice self and deal medium Almighty damage to all."],["Sharp Student","Passive",0,"None","Passive",7,4,["Level up","Card","Talk"],"Lower odds of receiving critical hit."],["Shining Arrows","Bless",22,"SP","All foes",1,0,["Innate"],"Deal light Bless damage to all foes 4 to 8 times."],["Shock Boost","Passive",0,"None","Passive",6,26,["Level up"],"Increase chance of inflicting Shock."],["Skull Cracker","Phys",10,"HP","1 foe",4,10,["Level up","Talk"],"Deal medium Phys damage and inflict Confuse (medium odds) to 1 foe."],["Sledgehammer","Phys",10,"HP","1 foe",4,28,["Level up","Talk"],"Deal medium Phys damage and inflict Dizzy (medium odds) to 1 foe."],["Sleep Boost","Passive",0,"None","Passive",2,11,["Level up","Talk"],"Increase chance of inflicting Sleep."],["Snap","Gun",9,"HP","1 foe",2,0,["Talk"],"Deal medium Gun damage to 1 foe."],["Soul Chain","Passive",0,"None","Passive",0,0,["Card"],"Recover 20 SP when performing Baton Pass."],["Soul Touch","Passive",0,"None","Passive",0,0,["Innate"],"Recover 5 SP after Baton Pass"],["Speed Master","Passive",0,"None","Passive",4,20,["Level up"],"Automatic Sukukaja at the start of battle."],["Spell Master","Passive",0,"None","Passive",5,82,["Level up","Card"],"Half SP cost for magic skills."],["Spirit Drain","Almighty",3,"SP","1 foe",8,36,["Level up"],"Drains SP from 1 foe."],["Spirit Leech","Almighty",0,"None","1 foe",0,0,["Innate"],"Drains 150 SP from 1 foe."],["Stagnant Air","Almighty",5,"SP","All foes",5,49,["Level up","Fusion"],"Increase susceptibility to all ailments of all foes and allies."],["Stealth","Passive",0,"None","Passive",0,0,["Innate"],"Lowers chance of being targeted"],["Stomach Blow","Phys",0,"None","1 foe",0,0,["Innate"],"Medium Physical damage to 1 foe and inflict Hunger."],["Subrecover HP","Passive",0,"None","Passive",0,0,["Innate"],"After battle, 10% HP recovery for backup allies."],["Subrecover HP EX","Passive",0,"None","Passive",0,0,["Innate"],"After battle, 20% HP recovery for backup allies."],["Subrecover SP","Passive",0,"None","Passive",0,0,["Innate"],"After battle, 1% SP recovery for backup allies."],["Subrecover SP EX","Passive",0,"None","Passive",0,0,["Innate"],"After battle, 3% SP recovery for backup allies."],["Sukukaja","Support",8,"SP","1 ally",6,7,["Level up","Card","Talk"],"Increase 1 ally's Agility for 3 turns."],["Sukunda","Support",8,"SP","1 foe",7,4,["Level up","Talk"],"Decrease 1 foe's Agility for 3 turns."],["Summon","Almighty",0,"None","Other",0,0,["Innate"],"Summon ally reinforcements."],["Support Plus 1","Passive",0,"None","Passive",0,0,["Card"],"Adds Masukunda to Moral Support pool"],["Support Plus 2","Passive",0,"None","Passive",0,0,["Card"],"Adds Masukunda and Marakunda to Moral Support pool"],["Support Plus 3","Passive",0,"None","Passive",0,0,["Card"],"Adds Masukunda, Marakunda, and Matarunda to Moral Support pool"],["Support Rate Up","Passive",0,"None","Passive",0,0,["Card"],"Raises chance of Moral Support activating"],["Survival Trick","Passive",0,"None","Passive",3,65,["Level up","Talk"],"Survive one instant death attack with 1 HP remaining."],["Swift Strike","Phys",17,"HP","All foes",8,22,["Level up","Talk"],"Deal miniscule Phys damage to all foes 2-4 times."],["Sword Dance","Phys",21,"HP","1 foe",4,79,["Level up","Fusion"],"Deal colossal Phys damage to 1 foe with high critical."],["Tarukaja","Support",8,"SP","1 ally",16,5,["Level up","Card","Talk"],"Increase 1 ally's Attack power for 3 turns."],["Tarunda","Support",8,"SP","1 foe",8,8,["Level up","Talk"],"Decrease 1 foe's Attack power for 3 turns."],["Taunt","Ailment",3,"SP","1 foe",4,13,["Level up","Talk"],"Inflict Rage (high odds) to 1 foe."],["Tempest Slash","Phys",17,"HP","1 foe",4,43,["Level up","Talk"],"Deal minuscule Phys damage to 1 foe 3 to 5 times ."],["Tentarafoo","Ailment",8,"SP","All foes",6,35,["Level up"],"Inflict Confuse (medium odds) to all foes."],["Terror Claw","Phys",8,"HP","1 foe",4,10,["Level up","Talk"],"Deal medium Phys damage and inflict Fear (medium odds) to 1 foe."],["Tetra Break","Support",9,"SP","All foes",6,40,["Level up","Talk"],"Remove physical-repellent shields from all foes."],["Tetraja","Support",24,"SP","Party",7,28,["Level up","Card"],"Create shields on party to nullify one instant death attack of Bless or Curse types."],["Tetrakarn","Support",24,"SP","1 ally",3,33,["Level up","Card","Talk","Fusion"],"Create a shield on 1 ally to repel 1 Phys attack."],["Thermopylae","Support",30,"SP","Party",3,38,["Level up"],"Increase party's Attack, Defense and Agility for 3 turns. Only usable if the party is surrounded."],["Thunder Reign","Elec",48,"SP","1 foe",2,0,["Fusion"],"Deal severe Electric damage to 1 foe."],["Titanomachia","Fire",34,"SP","All foes",1,0,["Innate"],"Deal severe Fire damage to all foes and inflict Fear (high odds)."],["Touch n' Go","Passive",0,"None","Passive",2,49,["Level up"],"Apply Sukukaja when performing Baton Pass."],["Treasure Reboot","Passive",0,"None","Passive",0,0,["Innate"],"Chance to revive search objects in the area after battle."],["Treasure Skimmer","Passive",0,"None","Passive",0,0,["Innate"],"Find out if a foe is carrying a rare item ahead of time."],["Trigger Happy","Passive",0,"None","Passive",1,70,["Level up"],"Increase critical rate of Gun attacks."],["Triple Down","Gun",16,"HP","All foes",3,52,["Level up","Fusion"],"Deal light Gun damage to all foes 3 times."],["Tyrant's Mind","Passive",0,"None","Passive",1,98,["Level up"],"All damage +25%, Can exceed 100% limit"],["Tyrant's Will","Support",15,"SP","1 ally",0,0,["Card"],"Next Phys attack +150% damage for 1 ally, Defense Master"],["Ultimate Support","Passive",0,"None","Passive",0,0,["Innate"],"Moral Support may now fully recover and buff all allies"],["Unshaken Will","Passive",0,"None","Passive",1,81,["Level up"],"Impart immunity against all mental ailments."],["Vacuum Wave","Wind",48,"SP","All foes",3,85,["Level up"],"Deal severe Wind damage to all foes."],["Vajra Blast","Phys",13,"HP","All foes",2,19,["Level up","Talk"],"Deal medium Phys damage to all foes."],["Vault Guardian","Support",20,"SP","Other",0,0,["Card"],"Marakukaja, Begins battle with Tetrakarn + Makarakarn"],["Vicious Strike","Phys",18,"HP","All foes",1,24,["Level up","Fusion"],"Deal medium Phys damage to all foes."],["Victory Cry","Passive",0,"None","Passive",2,99,["Level up"],"Recover full HP and SP after a successful battle."],["Vorpal Blade","Phys",23,"HP","All foes",4,55,["Level up","Talk","Fusion"],"Deal severe Phys damage to all foes."],["Wage War","Ailment",8,"SP","All foes",5,15,["Level up","Talk"],"Inflict Rage (medium odds) to all foes."],["Wild Thunder","Elec",54,"SP","All foes",2,71,["Level up"],"Deal severe Electric damage to all foes."],["Wind Amp","Passive",0,"None","Passive",5,54,["Level up","Talk","Fusion"],"Strengthen Wind attacks by 50%."],["Wind Boost","Passive",0,"None","Passive",2,25,["Level up","Talk"],"Strengthen Wind attacks by 25%."],["Wind Break","Support",6,"SP","All foes",3,20,["Level up","Talk"],"Negate Wind resistances of all foes."],["Wind Wall","Support",18,"SP","1 ally",6,14,["Level up"],"Create a shield on 1 ally to reduce damage of Wind attacks for 3 turns."],["Wings of Wisdom","Support",10,"SP","Other",0,0,["Card"],"Amrita Shower, Speed Master"],["Zio","Elec",4,"SP","1 foe",2,7,["Level up"],"Deal light Electric damage to 1 foe."],["Ziodyne","Elec",12,"SP","1 foe",13,37,["Level up","Talk","Fusion"],"Deal heavy Electric damage to 1 foe."],["Zionga","Elec",8,"SP","1 foe",6,0,["Talk"],"Deal medium Electric damage to 1 foe."]];
 
-let answer, guesses, done, active = 0, matches = [];
+const PERSONAS = PERSONA_DATA.map(r => ({name:r[0],arcana:r[1],level:r[2],aff:r[3],weak:r[4],res:r[5],area:r[6],type:r[7],trait:r[8]}));
+const SKILLS = SKILL_DATA.map(r => ({name:r[0],el:r[1],cost:r[2],ctype:r[3],target:r[4],learned:r[5],from:r[6],src:r[7],effect:r[8]}));
+
+const STEP = 190;
+const SLOW = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = id => document.getElementById(id);
-const q = $("q"), drop = $("drop"), rows = $("rows");
 
-function pool(){
-  return $("easy").checked ? LIST.filter(p => p.type === "Standard" || p.type === "Special") : LIST;
-}
-
-function newGame(){
-  const p = pool();
-  answer = p[Math.floor(Math.random() * p.length)];
-  guesses = []; done = false;
-  rows.innerHTML = ""; q.value = ""; q.disabled = false;
-  $("banner").classList.remove("show");
-  closeDrop(); updateCount(); q.focus();
-}
-
-function updateCount(msg){
-  const n = guesses.length;
-  $("count").textContent = msg || (n === 0
-    ? `No guesses yet — ${pool().length} personas in play.`
-    : `${n} guess${n === 1 ? "" : "es"} so far.`);
-  $("h1").disabled = done || n < 4;
-  $("h2").disabled = done || n < 8;
-  $("h3").disabled = done || n < 10;
-}
-
+/* ---------- shared helpers ---------- */
 function cell(text, cls, arrow){
   const d = document.createElement("div");
   d.className = "cell" + (cls ? " " + cls : "");
@@ -178,115 +227,473 @@ function cell(text, cls, arrow){
   }
   return d;
 }
-
 function setCompare(a, b){
-  const A = new Set(a), B = new Set(b);
+  const B = new Set(b);
   if (a.length === b.length && a.every(x => B.has(x))) return "ok";
   return a.some(x => B.has(x)) ? "close" : "";
 }
+function numCell(mine, theirs, tol, text){
+  const diff = theirs - mine;
+  return [text, diff === 0 ? "ok" : (Math.abs(diff) <= tol ? "close" : ""), diff === 0 ? "" : (diff > 0 ? "▲" : "▼")];
+}
 
-const STEP = 190;
-let revealing = false;
+/* ---------- attribute-guessing engine, shared by Personadle and Skilldle ---------- */
+function AttrMode(root, cfg){
+  root.innerHTML = `
+    <p class="intro">${cfg.intro}</p>
+    <div class="searchbar">
+      <input type="text" class="q" placeholder="${cfg.placeholder}" autocomplete="off" aria-label="${cfg.placeholder}">
+      <div class="drop" role="listbox"></div>
+    </div>
+    <div class="bar">
+      <button class="h1" disabled>${cfg.hints[0].label} (4)</button>
+      <button class="h2" disabled>Reveal first letter (8)</button>
+      <button class="h3" disabled>Show answer (10)</button>
+      <button class="new">${cfg.newLabel}</button>
+      <label class="toggle"><input type="checkbox" class="easy" checked style="accent-color:#E60012"> ${cfg.easyLabel}</label>
+      <div class="score">0 / 0 solved</div>
+    </div>
+    <div class="count">—</div>
+    <div class="banner"><div>
+      <div class="verdict">FOUND</div><h2 class="b-name">—</h2>
+      <p class="b-1">—</p><p class="b-2">—</p><p class="b-3">—</p>
+    </div></div>
+    <div class="scroller"><div class="grid"><div class="head"></div><div class="rows"></div></div></div>
+    <div class="legend">
+      <span><span class="chip" style="background:#E60012"></span>exact match</span>
+      <span><span class="chip" style="background:#F2C14E"></span>partial or close</span>
+      <span><span class="chip" style="background:#2A2624;border:1px solid #444"></span>no match</span>
+      <span>▲ answer is higher · ▼ answer is lower</span>
+    </div>`;
 
-function guess(p){
-  if (done || revealing) return;
-  guesses.push(p.name);
-  const diff = answer.level - p.level;
-  const plan = [
-    [p.name, "name", ""],
-    [p.arcana, p.arcana === answer.arcana ? "ok" : "", ""],
-    [p.level, diff === 0 ? "ok" : (Math.abs(diff) <= 8 ? "close" : ""), diff === 0 ? "" : (diff > 0 ? "▲" : "▼")],
-    [p.aff, p.aff === answer.aff ? "ok" : "", ""],
-    [p.weak.length ? p.weak.join(", ") : "None", setCompare(p.weak, answer.weak), ""],
-    [p.area === "-" ? "Not in Mementos" : p.area, p.area === answer.area ? "ok" : "", ""],
-    [p.type, p.type === answer.type ? "ok" : "", ""]
-  ];
-
-  const line = document.createElement("div");
-  line.className = "line";
-  const cells = plan.map(([text, cls, arrow]) => {
-    const el = cell(text, "pending", arrow);
-    if (cls === "name") el.classList.add("name");
-    line.appendChild(el);
-    return {el, cls};
+  const q = root.querySelector(".q"), drop = root.querySelector(".drop"),
+        rowsEl = root.querySelector(".rows"), head = root.querySelector(".head"),
+        grid = root.querySelector(".grid"), banner = root.querySelector(".banner"),
+        count = root.querySelector(".count"), score = root.querySelector(".score"),
+        easy = root.querySelector(".easy");
+  const tpl = cfg.columns.map(c => c.w + "px").join(" ");
+  grid.style.minWidth = (cfg.columns.reduce((s, c) => s + c.w + 6, 0)) + "px";
+  head.style.gridTemplateColumns = tpl;
+  cfg.columns.forEach(c => {
+    const d = document.createElement("div"); d.textContent = c.label; head.appendChild(d);
   });
-  rows.prepend(line);
-  q.value = ""; closeDrop();
 
-  const slow = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const step = slow ? STEP : 0;
-  revealing = true;
-  cells.forEach((c, i) => setTimeout(() => {
-    c.el.classList.remove("pending");
-    if (c.cls && c.cls !== "name") c.el.classList.add(c.cls);
-    c.el.classList.add("flip");
-  }, i * step));
+  let answer, guesses = [], done = false, revealing = false, matches = [], active = 0, played = 0, won = 0;
 
-  setTimeout(() => {
-    revealing = false;
-    updateCount();
-    if (p.name === answer.name) finish(true);
-  }, cells.length * step + (slow ? 260 : 0));
-}
+  const pool = () => easy.checked ? cfg.list.filter(cfg.easyFilter) : cfg.list;
 
-function finish(win){
-  done = true; q.disabled = true;
-  $("verdict").textContent = win ? "REGISTERED TO THE COMPENDIUM" : "THE CONTRACT LAPSED";
-  $("bName").textContent = answer.name;
-  $("bMeta").textContent = `${answer.arcana} · level ${answer.level} · ${answer.aff} affinity · ${answer.type}`;
-  $("bRes").textContent = `Resists ${answer.res.length ? answer.res.join(", ") : "nothing"} · weak to ${answer.weak.length ? answer.weak.join(", ") : "nothing"} · trait: ${answer.trait}`;
-  $("bNote").textContent = win ? `Found in ${guesses.length} guess${guesses.length === 1 ? "" : "es"}.` : "Revealed. The next one will come easier.";
-  $("banner").classList.add("show");
-  updateCount(win ? "Correct." : "Answer revealed.");
-}
+  function info(msg){
+    const n = guesses.length;
+    count.textContent = msg || (n === 0
+      ? `No guesses yet — ${pool().length} ${cfg.unit} in play.`
+      : `${n} guess${n === 1 ? "" : "es"} so far.`);
+    root.querySelector(".h1").disabled = done || n < 4;
+    root.querySelector(".h2").disabled = done || n < 8;
+    root.querySelector(".h3").disabled = done || n < 10;
+  }
 
-function suggestions(){
-  const term = q.value.trim().toLowerCase();
-  return LIST.filter(p => !guesses.includes(p.name) && p.name.toLowerCase().includes(term)).slice(0, 60);
-}
+  function reset(){
+    const p = pool();
+    answer = p[Math.floor(Math.random() * p.length)];
+    guesses = []; done = false; revealing = false;
+    rowsEl.innerHTML = ""; q.value = ""; q.disabled = false;
+    banner.classList.remove("show");
+    closeDrop(); info();
+  }
 
-function openDrop(){
-  if (done) return closeDrop();
-  matches = suggestions(); active = 0;
-  drop.innerHTML = "";
-  if (!matches.length) return closeDrop();
-  matches.forEach((p, i) => {
-    const o = document.createElement("div");
-    o.className = "opt" + (i === 0 ? " active" : "");
-    o.setAttribute("role", "option");
-    const n = document.createElement("span"); n.textContent = p.name;
-    const s = document.createElement("small"); s.textContent = `${p.arcana} · lv ${p.level}`;
-    o.append(n, s);
-    o.onmousedown = e => { e.preventDefault(); guess(p); };
-    drop.appendChild(o);
+  function guess(item){
+    if (done || revealing) return;
+    guesses.push(item.name);
+    const plan = [[item.name, "name", ""]].concat(cfg.columns.slice(1).map(c => c.cell(item, answer)));
+    const line = document.createElement("div");
+    line.className = "line";
+    line.style.gridTemplateColumns = tpl;
+    const cells = plan.map(([text, cls, arrow]) => {
+      const el = cell(text, "pending", arrow);
+      if (cls === "name") el.classList.add("name");
+      line.appendChild(el);
+      return {el, cls};
+    });
+    rowsEl.prepend(line);
+    q.value = ""; closeDrop();
+
+    const step = SLOW ? STEP : 0;
+    revealing = true;
+    cells.forEach((c, i) => setTimeout(() => {
+      c.el.classList.remove("pending");
+      if (c.cls && c.cls !== "name") c.el.classList.add(c.cls);
+      c.el.classList.add("flip");
+    }, i * step));
+    setTimeout(() => {
+      revealing = false; info();
+      if (item.name === answer.name) finish(true);
+    }, cells.length * step + (SLOW ? 260 : 0));
+  }
+
+  function finish(win){
+    done = true; q.disabled = true; played++; if (win) won++;
+    score.textContent = `${won} / ${played} solved`;
+    banner.querySelector(".verdict").textContent = win ? cfg.winVerdict : "THE CONTRACT LAPSED";
+    banner.querySelector(".b-name").textContent = answer.name;
+    const lines = cfg.summary(answer);
+    banner.querySelector(".b-1").textContent = lines[0] || "";
+    banner.querySelector(".b-2").textContent = lines[1] || "";
+    banner.querySelector(".b-3").textContent = win
+      ? `Found in ${guesses.length} guess${guesses.length === 1 ? "" : "es"}.`
+      : "Revealed. Next one's yours.";
+    banner.classList.add("show");
+    info(win ? "Correct." : "Answer revealed.");
+  }
+
+  function suggestions(){
+    const t = q.value.trim().toLowerCase();
+    if (!t) return [];
+    return cfg.list.filter(x => !guesses.includes(x.name) && x.name.toLowerCase().includes(t)).slice(0, 60);
+  }
+  function openDrop(){
+    if (done) return closeDrop();
+    matches = suggestions(); active = 0;
+    drop.innerHTML = "";
+    if (!matches.length) return closeDrop();
+    matches.forEach((x, i) => {
+      const o = document.createElement("div");
+      o.className = "opt" + (i === 0 ? " active" : "");
+      o.setAttribute("role", "option");
+      const n = document.createElement("span"); n.textContent = x.name;
+      const s = document.createElement("small"); s.textContent = cfg.hintLine(x);
+      o.append(n, s);
+      o.onmousedown = e => { e.preventDefault(); guess(x); };
+      drop.appendChild(o);
+    });
+    drop.classList.add("open");
+  }
+  function closeDrop(){ drop.classList.remove("open"); drop.innerHTML = ""; matches = []; }
+
+  q.addEventListener("input", openDrop);
+  q.addEventListener("blur", () => setTimeout(closeDrop, 150));
+  q.addEventListener("keydown", e => {
+    if (!matches.length) return;
+    if (e.key === "ArrowDown"){ e.preventDefault(); active = (active + 1) % matches.length; hi(); }
+    else if (e.key === "ArrowUp"){ e.preventDefault(); active = (active - 1 + matches.length) % matches.length; hi(); }
+    else if (e.key === "Enter"){ e.preventDefault(); guess(matches[active]); }
+    else if (e.key === "Escape") closeDrop();
   });
-  drop.classList.add("open");
-}
-function closeDrop(){ drop.classList.remove("open"); drop.innerHTML = ""; matches = []; }
-function highlight(){
-  [...drop.children].forEach((c, i) => c.classList.toggle("active", i === active));
-  const el = drop.children[active];
-  if (el) el.scrollIntoView({block: "nearest"});
+  function hi(){
+    [...drop.children].forEach((c, i) => c.classList.toggle("active", i === active));
+    const el = drop.children[active];
+    if (el) el.scrollIntoView({block: "nearest"});
+  }
+
+  root.querySelector(".h1").onclick = e => { info(cfg.hints[0].run(answer)); e.target.disabled = true; };
+  root.querySelector(".h2").onclick = e => { info(`Hint — the name starts with "${answer.name[0]}".`); e.target.disabled = true; };
+  root.querySelector(".h3").onclick = () => finish(false);
+  root.querySelector(".new").onclick = reset;
+  easy.onchange = reset;
+
+  reset();
+  return {focus: () => q.focus()};
 }
 
-q.addEventListener("input", openDrop);
-q.addEventListener("focus", openDrop);
-q.addEventListener("blur", () => setTimeout(closeDrop, 150));
-q.addEventListener("keydown", e => {
-  if (!matches.length) return;
-  if (e.key === "ArrowDown"){ e.preventDefault(); active = (active + 1) % matches.length; highlight(); }
-  else if (e.key === "ArrowUp"){ e.preventDefault(); active = (active - 1 + matches.length) % matches.length; highlight(); }
-  else if (e.key === "Enter"){ e.preventDefault(); guess(matches[active]); }
-  else if (e.key === "Escape") closeDrop();
+/* ---------- mode 1: Personadle ---------- */
+const personaMode = AttrMode($("mode-persona"), {
+  list: PERSONAS,
+  unit: "personas",
+  intro: "One persona from the Royal compendium. Every guess is compared across six attributes — arcana, level, inheritance type, weaknesses, where it spawns in Mementos, and how you obtain it.",
+  placeholder: "Type a persona name…",
+  newLabel: "New persona",
+  easyLabel: "Skip DLC and treasure demons",
+  easyFilter: p => p.type === "Standard" || p.type === "Special",
+  winVerdict: "REGISTERED TO THE COMPENDIUM",
+  hintLine: p => `${p.arcana} · lv ${p.level}`,
+  hints: [{label: "Reveal trait", run: a => `Hint — trait: ${a.trait}.`}],
+  summary: a => [
+    `${a.arcana} · level ${a.level} · ${a.aff} affinity · ${a.type}`,
+    `Resists ${a.res.length ? a.res.join(", ") : "nothing"} · weak to ${a.weak.length ? a.weak.join(", ") : "nothing"} · trait: ${a.trait}`
+  ],
+  columns: [
+    {label: "Persona", w: 158},
+    {label: "Arcana", w: 100, cell: (g, a) => [g.arcana, g.arcana === a.arcana ? "ok" : "", ""]},
+    {label: "Level", w: 74, cell: (g, a) => numCell(g.level, a.level, 8, g.level)},
+    {label: "Affinity", w: 96, cell: (g, a) => [g.aff, g.aff === a.aff ? "ok" : "", ""]},
+    {label: "Weak to", w: 120, cell: (g, a) => [g.weak.length ? g.weak.join(", ") : "None", setCompare(g.weak, a.weak), ""]},
+    {label: "Mementos area", w: 132, cell: (g, a) => [g.area === "-" ? "Not in Mementos" : g.area, g.area === a.area ? "ok" : "", ""]},
+    {label: "Type", w: 108, cell: (g, a) => [g.type, g.type === a.type ? "ok" : "", ""]}
+  ]
 });
 
-$("h1").onclick = () => { updateCount(`Hint — trait: ${answer.trait}.`); $("h1").disabled = true; };
-$("h2").onclick = () => { updateCount(`Hint — the name starts with "${answer.name[0]}".`); $("h2").disabled = true; };
-$("h3").onclick = () => finish(false);
-$("new").onclick = newGame;
-$("easy").onchange = newGame;
+/* ---------- mode 2: Skilldle ---------- */
+const costText = s => s.ctype === "None" ? "—" : (s.ctype === "SP" ? s.cost + " SP" : s.cost + "% HP");
+const skillMode = AttrMode($("mode-skill"), {
+  list: SKILLS,
+  unit: "skills",
+  intro: "One skill out of 435. Cost is SP for most and a share of max HP for Phys skills, so the arrow only appears when your guess spends the same resource. How many personas learn it is the strongest filter you have.",
+  placeholder: "Type a skill name…",
+  newLabel: "New skill",
+  easyLabel: "Active skills only (no passives)",
+  easyFilter: s => s.el !== "Passive",
+  winVerdict: "SKILL MASTERED",
+  hintLine: s => `${s.el} · ${costText(s)}`,
+  hints: [{label: "Reveal effect", run: a => `Hint — effect: ${a.effect}`}],
+  summary: a => [
+    a.effect,
+    `${a.el} · ${costText(a)} · ${a.target} · learned by ${a.learned} persona${a.learned === 1 ? "" : "s"}${a.from ? ` from level ${a.from}` : ""} · ${a.src.join(", ")}`
+  ],
+  columns: [
+    {label: "Skill", w: 172},
+    {label: "Element", w: 96, cell: (g, a) => [g.el, g.el === a.el ? "ok" : "", ""]},
+    {label: "Cost", w: 88, cell: (g, a) => {
+      if (g.ctype !== a.ctype) return [costText(g), "", ""];
+      if (g.ctype === "None") return [costText(g), "ok", ""];
+      return numCell(g.cost, a.cost, 5, costText(g));
+    }},
+    {label: "Target", w: 96, cell: (g, a) => [g.target, g.target === a.target ? "ok" : "", ""]},
+    {label: "Learned by", w: 96, cell: (g, a) => numCell(g.learned, a.learned, 3, g.learned)},
+    {label: "From level", w: 96, cell: (g, a) => numCell(g.from, a.from, 8, g.from === 0 ? "Innate" : g.from)},
+    {label: "Sources", w: 136, cell: (g, a) => [g.src.join(", "), setCompare(g.src, a.src), ""]}
+  ]
+});
 
-newGame();
+/* ---------- mode 3: letter wordle ---------- */
+const WORDS = (() => {
+  const seen = new Map();
+  PERSONAS.forEach(p => {
+    const plain = p.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    if (/^[A-Z]{4,10}$/.test(plain) && !seen.has(plain)) seen.set(plain, p);
+  });
+  return [...seen.entries()].map(([w, p]) => ({word: w, p}));
+})();
+const WORDSET = new Set(WORDS.map(w => w.word));
+const ROWS = 6;
+let wAnswer, wGrid, wRow, wCol, wOver, wHints, wPlayed = 0, wWon = 0;
+
+function wPool(){
+  const want = +$("w-len").value;
+  const list = WORDS.filter(w => !want || w.word.length === want);
+  return list.length ? list : WORDS;
+}
+function wNew(){
+  const list = wPool();
+  wAnswer = list[Math.floor(Math.random() * list.length)];
+  wRow = 0; wCol = 0; wOver = false; wHints = 0;
+  wGrid = Array.from({length: ROWS}, () => Array(wAnswer.word.length).fill(""));
+  $("w-banner").classList.remove("show");
+  $("w-msg").textContent = "";
+  $("w-info").textContent = `${wAnswer.word.length} letters · ${WORDS.filter(w => w.word.length === wAnswer.word.length).length} personas share that length.`;
+  wDraw(); wKeys();
+}
+function wDraw(){
+  const board = $("w-board");
+  board.innerHTML = "";
+  const avail = Math.min(640, window.innerWidth - 44);
+  const size = Math.max(26, Math.min(60, Math.floor(avail / wAnswer.word.length) - 7));
+  for (let r = 0; r < ROWS; r++){
+    const rowEl = document.createElement("div");
+    rowEl.className = "brow";
+    rowEl.style.gridTemplateColumns = `repeat(${wAnswer.word.length}, ${size}px)`;
+    for (let c = 0; c < wAnswer.word.length; c++){
+      const t = document.createElement("div");
+      t.className = "tile" + (wGrid[r][c] ? " filled" : "");
+      const s = document.createElement("span"); s.textContent = wGrid[r][c];
+      t.appendChild(s); rowEl.appendChild(t);
+    }
+    board.appendChild(rowEl);
+  }
+  for (let r = 0; r < wRow; r++) wPaint(r, wGrid[r].join(""));
+}
+function wKeys(){
+  const layout = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+  const keys = $("w-keys");
+  keys.innerHTML = "";
+  layout.forEach((line, i) => {
+    const r = document.createElement("div"); r.className = "krow";
+    if (i === 2){
+      const e = document.createElement("button");
+      e.className = "key wide"; e.textContent = "Enter"; e.onclick = wSubmit; r.appendChild(e);
+    }
+    for (const ch of line){
+      const k = document.createElement("button");
+      k.className = "key"; k.dataset.k = ch; k.textContent = ch;
+      k.onclick = () => wType(ch);
+      r.appendChild(k);
+    }
+    if (i === 2){
+      const b = document.createElement("button");
+      b.className = "key wide"; b.textContent = "Delete"; b.onclick = wBack; r.appendChild(b);
+    }
+    keys.appendChild(r);
+  });
+}
+function wType(ch){
+  if (wOver || wCol >= wAnswer.word.length) return;
+  wGrid[wRow][wCol] = ch; wCol++; wDraw();
+}
+function wBack(){
+  if (wOver || wCol === 0) return;
+  wCol--; wGrid[wRow][wCol] = ""; wDraw();
+}
+function wScore(guess){
+  const ans = wAnswer.word, res = Array(ans.length).fill("miss"), left = {};
+  for (let i = 0; i < ans.length; i++){
+    if (guess[i] === ans[i]) res[i] = "hit";
+    else left[ans[i]] = (left[ans[i]] || 0) + 1;
+  }
+  for (let i = 0; i < ans.length; i++){
+    if (res[i] === "hit") continue;
+    if (left[guess[i]]){ res[i] = "near"; left[guess[i]]--; }
+  }
+  return res;
+}
+function wPaint(r, guess){
+  const rowEl = $("w-board").children[r];
+  wScore(guess).forEach((state, i) => {
+    rowEl.children[i].classList.add(state);
+    const key = $("w-keys").querySelector(`[data-k="${guess[i]}"]`);
+    if (key && !key.classList.contains("hit")){
+      if (state === "hit") key.classList.remove("near", "miss");
+      if (state !== "miss" || !key.classList.contains("near")) key.classList.add(state);
+    }
+  });
+}
+function wSubmit(){
+  if (wOver) return;
+  const guess = wGrid[wRow].join("");
+  if (guess.length < wAnswer.word.length) return wReject("Not enough letters.");
+  if ($("w-strict").checked && !WORDSET.has(guess)) return wReject("Not a persona in the compendium.");
+  wPaint(wRow, guess);
+  if (guess === wAnswer.word) return wFinish(true);
+  wRow++; wCol = 0;
+  if (wRow >= ROWS) return wFinish(false);
+  $("w-msg").textContent = `${ROWS - wRow} attempt${ROWS - wRow === 1 ? "" : "s"} left.`;
+}
+function wReject(text){
+  $("w-msg").textContent = text;
+  const rowEl = $("w-board").children[wRow];
+  rowEl.classList.remove("shake"); void rowEl.offsetWidth; rowEl.classList.add("shake");
+}
+function wFinish(win){
+  wOver = true; wPlayed++; if (win) wWon++;
+  $("w-score").textContent = `${wWon} / ${wPlayed} solved`;
+  $("w-verdict").textContent = win ? "REGISTERED TO THE COMPENDIUM" : "THE CONTRACT LAPSED";
+  $("w-name").textContent = wAnswer.p.name;
+  $("w-meta").textContent = `${wAnswer.p.arcana} · level ${wAnswer.p.level} · ${wAnswer.p.aff} affinity · trait: ${wAnswer.p.trait}`;
+  $("w-banner").classList.add("show");
+  $("w-msg").textContent = win ? "Correct." : "Out of attempts.";
+}
+$("w-hint").onclick = () => {
+  if (wOver) return;
+  wHints++;
+  const p = wAnswer.p;
+  if (wHints === 1) $("w-msg").textContent = `Arcana: ${p.arcana}.`;
+  else if (wHints === 2) $("w-msg").textContent = `Base level ${p.level}, ${p.aff} affinity.`;
+  else if (wHints === 3) $("w-msg").textContent = `Starts with ${wAnswer.word[0]}, ends with ${wAnswer.word[wAnswer.word.length - 1]}.`;
+  else $("w-msg").textContent = "No hints left. Trust your intuition.";
+};
+$("w-new").onclick = wNew;
+$("w-len").onchange = wNew;
+let rz;
+window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(wDraw, 150); });
+document.addEventListener("keydown", e => {
+  if (!$("mode-word").classList.contains("on")) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (tag === "INPUT" || tag === "SELECT") return;
+  if (e.key === "Enter"){ e.preventDefault(); wSubmit(); }
+  else if (e.key === "Backspace"){ e.preventDefault(); wBack(); }
+  else if (/^[a-zA-Z]$/.test(e.key)) wType(e.key.toUpperCase());
+});
+wNew();
+
+/* ---------- mode 4: alphabetical compendium ---------- */
+const NAME_LISTS = {
+  persona: PERSONAS.map(p => p.name).sort((a, b) => a.localeCompare(b)),
+  skill: SKILLS.map(s => s.name).sort((a, b) => a.localeCompare(b))
+};
+let lSet = "persona", lLetter = "";
+
+function lKey(name){
+  const c = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")[0].toUpperCase();
+  return /[A-Z]/.test(c) ? c : "#";
+}
+function lLetters(){
+  return [...new Set(NAME_LISTS[lSet].map(lKey))].sort();
+}
+function lDrawAlpha(){
+  const box = $("l-alpha");
+  box.innerHTML = "";
+  const all = document.createElement("button");
+  all.textContent = "All"; all.className = lLetter ? "" : "on";
+  all.onclick = () => { lLetter = ""; lDrawAlpha(); lRender(); };
+  box.appendChild(all);
+  lLetters().forEach(ch => {
+    const b = document.createElement("button");
+    b.textContent = ch; b.className = lLetter === ch ? "on" : "";
+    b.onclick = () => { lLetter = lLetter === ch ? "" : ch; lDrawAlpha(); lRender(); };
+    box.appendChild(b);
+  });
+}
+function lRender(){
+  const term = $("l-q").value.trim().toLowerCase();
+  const names = NAME_LISTS[lSet].filter(n =>
+    (!lLetter || lKey(n) === lLetter) &&
+    (!term || n.toLowerCase().includes(term)));
+  const out = $("l-out");
+  out.innerHTML = "";
+  const groups = new Map();
+  names.forEach(n => {
+    const k = lKey(n);
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(n);
+  });
+  groups.forEach((items, letter) => {
+    const g = document.createElement("div");
+    g.className = "grp";
+    const h = document.createElement("h3"); h.textContent = letter;
+    const ul = document.createElement("ul");
+    items.forEach(n => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      li.tabIndex = 0;
+      li.onclick = () => lCopy(n);
+      li.onkeydown = e => { if (e.key === "Enter") lCopy(n); };
+      ul.appendChild(li);
+    });
+    g.append(h, ul);
+    out.appendChild(g);
+  });
+  const unit = lSet === "persona" ? "persona" : "skill";
+  $("l-count").textContent = names.length
+    ? `${names.length} ${unit}${names.length === 1 ? "" : "s"}${lLetter || term ? " shown" : " in total"}.`
+    : "Nothing matches that.";
+}
+function lCopy(name){
+  const done = () => { $("l-count").textContent = `Copied "${name}".`; };
+  try {
+    navigator.clipboard.writeText(name).then(done, () => { $("l-count").textContent = name; });
+  } catch (err){ $("l-count").textContent = name; }
+}
+$("l-q").addEventListener("input", lRender);
+[...document.querySelectorAll(".sw")].forEach(b => b.onclick = () => {
+  lSet = b.dataset.set; lLetter = "";
+  [...document.querySelectorAll(".sw")].forEach(x => x.classList.toggle("on", x === b));
+  lDrawAlpha(); lRender();
+});
+lDrawAlpha(); lRender();
+
+/* ---------- tabs ---------- */
+$("tabs").addEventListener("click", e => {
+  const tab = e.target.closest(".tab");
+  if (!tab) return;
+  const mode = tab.dataset.mode;
+  [...$("tabs").children].forEach(t => t.classList.toggle("on", t === tab));
+  ["persona", "skill", "word", "list"].forEach(m => $("mode-" + m).classList.toggle("on", m === mode));
+  location.hash = mode;
+  if (mode === "word") wDraw();
+});
+const start = location.hash.replace("#", "");
+if (["persona", "skill", "word", "list"].includes(start)){
+  const tab = [...$("tabs").children].find(t => t.dataset.mode === start);
+  if (tab) tab.click();
+}
 </script>
 </body>
 </html>
